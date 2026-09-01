@@ -557,6 +557,8 @@ img.bleed{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
         <select class="bd-preset" data-preset aria-label="Load an example">
           <option value="">Load a worked example…</option>
           <option value="reef">Coral reef &amp; fishing town</option>
+          <option value="pnw">Pacific Northwest forest</option>
+          <option value="sonoran">Phoenix sprawl &amp; the Sonoran Desert</option>
           <option value="fishery">Managed fishery</option>
           <option value="fashion">Fast fashion</option>
         </select>
@@ -733,9 +735,10 @@ img.bleed{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
             off the assignment checklist as you work. When the checklist is full, write your
             sustainability lens and explanation under <span class="bd-ui">Write-up</span>, then
             <span class="bd-ui">Save as PDF</span>. Every student submits their own copy.</p>
-          <p class="bd-i-p bd-i-muted">The worked examples are there to be taken apart:
-            <i>Coral reef &amp; fishing town</i> is a full food chain wired into a fishing town,
-            with two loops pulling against each other.</p>
+          <p class="bd-i-p bd-i-muted">The worked examples are there to be taken apart. Each
+            one wires a food chain into the system pulling on it &mdash; a reef into a fishing
+            town, a Pacific Northwest forest into fire and logging, the Sonoran Desert into the
+            edge of Phoenix.</p>
         </div>
         <div class="bd-modal-foot">
           <span class="bd-modal-note">Nothing is uploaded or stored &mdash; your work lives in this browser tab until you save the PDF.</span>
@@ -1072,6 +1075,56 @@ img.bleed{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
 
     /* ── presets ── */
     var PRESETS={
+      /* Temperate rainforest under a drying climate, with logging and fire.
+         Two runaway loops (roads beget logging beget roads; fuel builds) against
+         two brakes (fire thins the forest; smoke over towns drives policy). */
+      pnw:{name:'Pacific Northwest forest', biome:'tempforest',
+        veg:'Douglas-fir, western hemlock and redcedar over sword fern and moss \u2014 a dense evergreen canopy',
+        pre:'150\u2013250 cm a year, nearly all of it in a wet winter; summers run dry',
+        tmp:'Mild and narrow, roughly 0\u201327 \u00b0C, though recent heat domes have pushed far past that',
+        n:[['prod',120,95,'Conifers & understory'],
+           ['herb',120,250,'Elk & deer'],
+           ['carn',120,405,'Goshawks & coyotes'],
+           ['apex',305,500,'Wolves & cougars'],
+           ['decomp',305,95,'Fungi & deadwood'],
+           ['climate',525,80,'Warmer, drier summers'],
+           ['forest',500,260,'Dry fuel load'],
+           ['air',715,130,'Wildfire smoke'],
+           ['factory',660,400,'Logging & mills'],
+           ['road',470,445,'Logging roads'],
+           ['market',900,330,'Timber demand'],
+           ['gov',645,530,'Forest policy & thinning'],
+           ['house',900,140,'Nearby towns']],
+        l:[[0,1,2],[1,2,2],[2,3,2],[3,4,2],[4,0,2],
+           [5,6,1],[0,6,1],[6,0,-1],[6,7,1],
+           [7,12,-1],[12,11,-1],[11,6,-1],[11,8,-1],
+           [10,8,1],[8,10,-1],[8,0,-1],[8,9,1],[9,8,1]]},
+
+      /* Sonoran desert at the edge of Phoenix. Sprawl and roads reinforce each
+         other, heat and air-conditioning reinforce each other, and the two things
+         that push back are groundwater and the heat itself. */
+      sonoran:{name:'Phoenix sprawl & the Sonoran Desert', biome:'desert',
+        veg:'Saguaro, palo verde, creosote and bursage, widely spaced with bare ground between',
+        pre:'About 20 cm a year, split between gentle winter rain and summer monsoon storms',
+        tmp:'Summer highs above 43 \u00b0C, mild winters, and a large day-to-night swing',
+        n:[['prod',120,95,'Saguaro & creosote'],
+           ['herb',120,250,'Jackrabbits & packrats'],
+           ['carn',120,405,'Rattlesnakes & hawks'],
+           ['apex',300,505,'Coyotes & bobcats'],
+           ['decomp',300,95,'Soil microbes & termites'],
+           ['water',490,165,'Groundwater & canal water'],
+           ['climate',700,95,'Urban heat island'],
+           ['house',490,350,'New subdivisions'],
+           ['road',480,520,'Freeways & arterials'],
+           ['pipe',680,250,'Water & sewer mains'],
+           ['grid',890,175,'Power grid & A/C load'],
+           ['market',690,430,'Housing demand'],
+           ['gov',890,400,'Zoning & water policy']],
+        l:[[0,1,2],[1,2,2],[2,3,2],[3,4,2],[4,0,2],
+           [11,7,1],[7,0,-1],[7,8,1],[8,7,1],[8,3,-1],
+           [7,9,1],[9,5,-1],[5,12,-1],[12,7,-1],
+           [7,6,1],[6,10,1],[10,6,1],[6,11,-1]]},
+
       reef:{name:'Coral reef & fishing town', biome:'marine',
         veg:'Zooxanthellae inside the corals, plus turf algae and seagrass beds',
         pre:'Rainfall matters mostly as runoff \u2014 it carries sediment and nutrients onto the reef',
@@ -1099,7 +1152,8 @@ img.bleed{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
     wrap.querySelector('[data-preset]').addEventListener('change',function(e){
       var P=PRESETS[e.target.value]; if(!P) return;
       nodes.slice().forEach(removeNode); links=[];
-      var made=P.n.map(function(o){ return addNode(o[0],o[1],o[2]); });
+      var made=P.n.map(function(o){
+        var n=addNode(o[0],o[1],o[2]); if(o[3]) setLabel(n,o[3]); return n; });
       P.l.forEach(function(o){ links.push({a:made[o[0]],b:made[o[1]],p:o[2]}); });
       wrap.querySelector('[data-name]').value=P.name;
       if(P.biome && bSel){ bSel.value=P.biome; bVeg.value=P.veg||''; bPre.value=P.pre||''; bTmp.value=P.tmp||'';
