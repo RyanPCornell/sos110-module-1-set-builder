@@ -465,16 +465,32 @@ img.bleed{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
 .bd-renamehint{font-size:.58rem; font-weight:600; color:#6b7d75; background:#fff;
   border-radius:4px; padding:.02rem .3rem; box-shadow:0 2px 6px rgba(20,40,30,.1);}
 
+/* the quiet ⓘ Info button + its panel */
+.bd-info{font:inherit; font-weight:700; font-size:.74rem; cursor:pointer; color:#8c9a93;
+  background:none; border:none; padding:.35rem .3rem; border-radius:8px; letter-spacing:.01em;}
+.bd-info:hover{color:var(--forest-mid); text-decoration:underline; text-underline-offset:.18em;}
+.bd-info-card{width:min(46rem,100%);}
+.bd-info-list{margin:0; padding-left:1.35rem; display:flex; flex-direction:column; gap:.52rem;}
+.bd-info-list li{font-size:clamp(.78rem,1.18vw,.9rem); line-height:1.55; color:#33453d;}
+.bd-info-list li::marker{font-weight:900; color:var(--forest-mid);}
+.bd-info-list b{font-weight:800; color:var(--forest);}
+.bd-info-list i{font-style:italic;}
+.bd-info-sub{list-style:none; margin:.28rem 0 .3rem; padding-left:0;
+  display:flex; flex-direction:column; gap:.16rem;}
+.bd-info-sub li{font-size:.96em; padding-left:.85rem; position:relative;}
+.bd-info-sub li::before{content:""; position:absolute; left:0; top:.62em;
+  width:4px; height:4px; border-radius:50%; background:#c2cec8;}
+.bd-info-sub b.pos{color:#2f7d4f;} .bd-info-sub b.neg{color:#A4373A;} .bd-info-sub b.eng{color:#6a8f2f;}
+.bd-info-foot{margin-top:.75rem; padding-top:.6rem; border-top:1px solid var(--line);
+  font-size:clamp(.74rem,1.12vw,.85rem); line-height:1.5; color:#5b6b63; font-style:italic;}
+.bd-info-foot b{font-style:normal; font-weight:800; color:var(--forest);}
+
 
 /* ── standalone-only: no deck chrome, so reclaim the side padding ── */
 /* The engine pins .footer bottom-right, where it lands on top of the analysis
    panel's "Shock the system" button. Reserve a strip for it and centre it. */
 .bd-root{padding-inline:clamp(.9rem,2.6vw,2rem); bottom:1.5rem;}
 .footer{left:0; right:0; bottom:.4rem; text-align:center;}
-.bd-sub{font-size:clamp(.74rem,1.18vw,.9rem); color:#5b6b63; line-height:1.45;
-  margin-top:.22rem; max-width:96ch;}
-.bd-sub b{font-weight:900;}
-.bd-sub b.pos{color:#2f7d4f;} .bd-sub b.neg{color:#A4373A;} .bd-sub b.tro{color:#6a8f2f;}
 .footer{color:#9bb0a6;}
 /* narrow screens: become a normal scrolling page, palette wraps into chip rows */
 @media(max-width:900px){
@@ -505,7 +521,6 @@ img.bleed{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
       <div class="bd-titlewrap">
         <div class="eyebrow">SOS 110 &nbsp;·&nbsp; Module 1 Group Assignment</div>
         <h2 class="heading bd-h">Build Your Own Socio-Ecological-Technical System</h2>
-        <p class="bd-sub">Pick your biome, note what grows there and how much it rains, then build the system: drag in social, ecological, <b class="tro">trophic</b> and technical pieces, run the food chain up with <b class="tro">&#9889;</b> energy arrows and everything else with <b class="pos">+</b> and <b class="neg">&minus;</b> arrows. Double-click any piece to rename it. When the checklist is full, <b>Save as PDF</b> and submit that on Canvas.</p>
       </div>
       <div class="bd-toolbar">
         <input class="bd-name" data-name type="text" maxlength="42" placeholder="Title of your work…" aria-label="Title of your work">
@@ -526,6 +541,7 @@ img.bleed{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
           <option value="fishery">Managed fishery</option>
           <option value="fashion">Fast fashion</option>
         </select>
+        <button class="bd-info" type="button" data-infobtn title="How this tool works">&#9432; Info</button>
         <button class="bd-btn ghost" type="button" data-clear>Clear</button>
         <button class="bd-btn expl" type="button" data-explbtn title="Your sustainability lens, explanation and AI note">✎ Write-up</button>
         <button class="bd-btn pdf" type="button" data-pdf title="Opens your browser's print dialog — choose “Save as PDF”">⤓ Save as PDF</button>
@@ -652,6 +668,56 @@ img.bleed{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
         <div class="bd-shock-foot">
           <button class="bd-btn" type="button" data-shock-again>↻ Shock again</button>
           <button class="bd-btn pdf" type="button" data-shock-close>Got it</button>
+        </div>
+      </div>
+    </div>
+    <!-- ── how this works ── -->
+    <div class="bd-modal" data-infomodal hidden>
+      <div class="bd-modal-card bd-info-card" role="dialog" aria-modal="true" aria-label="How this tool works">
+        <div class="bd-modal-head">
+          <h3>How this works</h3>
+          <button class="bd-modal-x" type="button" data-info-close aria-label="Close">&times;</button>
+        </div>
+        <p class="bd-modal-hint">You are building the one-page diagram the assignment asks for,
+          and saving it as a PDF to hand in on Canvas.</p>
+        <div class="bd-modal-body">
+          <ol class="bd-info-list">
+            <li><b>Pick your biome.</b> Choosing one fills in starting values for dominant
+              vegetation, precipitation and temperature. Edit them freely &mdash; you should be
+              able to explain whatever you leave there.</li>
+            <li><b>Add the pieces.</b> Drag one in from the palette, or just click it. Every group
+              ends in a dashed <b>Custom&hellip;</b> piece for anything the palette does not have,
+              and you can <b>double-click any piece to rename it</b> &mdash; a desert's
+              <i>Producers</i> might read <i>saguaro &amp; creosote</i>.</li>
+            <li><b>Draw the arrows.</b> Switch to <b>&#10145; Connect</b> and drag from one piece
+              to another. There are three kinds:
+              <ul class="bd-info-sub">
+                <li><b class="pos">+ amplifies</b> &mdash; more of this, more of that.</li>
+                <li><b class="neg">&minus; dampens</b> &mdash; more of this, less of that.</li>
+                <li><b class="eng">&#9889; energy flows to</b> &mdash; the food chain: who eats
+                  whom. Use these to run producers up to your apex predators.</li>
+              </ul>
+              Click an arrow you have already drawn to cycle it through the three;
+              <b>&#9986; Remove</b> deletes pieces and arrows.</li>
+            <li><b>Watch the panel on the right.</b> It counts your three systems, finds the
+              feedback loops, and ticks off the assignment checklist as you work. Energy arrows
+              are left out of the loop count on purpose &mdash; a food chain is a chain, not a
+              feedback loop.</li>
+            <li><b>&#9889; Shock the system.</b> Click a piece, then shock it, to see whether a
+              small change runs away, keeps circulating, or fades out.</li>
+            <li><b>&#9998; Write-up.</b> Your sustainability lens (one challenge or opportunity,
+              why it matters, what you would do), your explanation of the diagram, and a note
+              crediting which specific parts were AI-assisted.</li>
+            <li><b>&#10515; Save as PDF</b> and submit that file. This is a collaborative effort,
+              but every student hands in their own copy.</li>
+          </ol>
+          <p class="bd-info-foot">Not sure where to start? Load the worked example
+            <b>Coral reef &amp; fishing town</b> &mdash; a full food chain wired into a fishing
+            town, with two feedback loops pulling against each other.</p>
+        </div>
+        <div class="bd-modal-foot">
+          <span class="bd-modal-note">Nothing here is uploaded or stored &mdash; your work lives in this browser tab until you save the PDF.</span>
+          <button class="bd-btn pdf" type="button" data-info-close>Got it</button>
         </div>
       </div>
     </div>
@@ -952,6 +1018,14 @@ img.bleed{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
       if(e.key==='Escape') closeExpl();
     });
     syncHint();
+
+    /* ── info ── */
+    var infoModal=wrap.querySelector('[data-infomodal]');
+    function closeInfo(){ infoModal.hidden=true; }
+    wrap.querySelector('[data-infobtn]').addEventListener('click',function(){ infoModal.hidden=false; });
+    wrap.querySelectorAll('[data-info-close]').forEach(function(b){ b.addEventListener('click',closeInfo); });
+    infoModal.addEventListener('pointerdown',function(e){ if(e.target===infoModal) closeInfo(); });
+    infoModal.addEventListener('keydown',function(e){ e.stopPropagation(); if(e.key==='Escape') closeInfo(); });
 
     /* ── modes / toolbar ── */
     wrap.querySelectorAll('.bd-mode').forEach(function(b){
