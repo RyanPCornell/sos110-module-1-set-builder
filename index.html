@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 1 SET Builder &mdash; map a biome as a socio-ecological-technical system</title>
+<meta name="description" content="Build the Module 1 group-assignment diagram: choose a biome, record its vegetation, precipitation and temperature, run a food chain from producers to apex predators, link the social, ecological and technical pieces with reinforcing and balancing arrows, then save the whole thing as a one-page PDF.">
+<meta property="og:title" content="Module 1 SET Builder">
+<meta property="og:description" content="Choose a biome, build its food chain and its social-ecological-technical system, find the feedback loops, and save the assignment as a PDF. A teaching tool from SOS 110.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#15201b; --forest:#1A3C34; --forest-mid:#2D6A4F; --green:#40916C;
+  --green-light:#74C69D; --pale:#F0F7F4; --line:#dde7e2; --muted:#5b6b63;
+  --gold:#B8860B; --amber:#C9722B; --paper:#ffffff;
+  --shadow:0 10px 30px rgba(20,40,30,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+/* Master type scale. Everything in this stylesheet is sized in rem, so this one
+   number makes the whole deck bigger or smaller together. It is set above 100%
+   so the text carries to the back of a lecture hall; a deck that runs out of
+   room on a dense slide can dial it back with `html{font-size:…}` in its own
+   EXTRA_CSS. */
+html{font-size:112%;}
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  color:var(--ink); background:#0c1411; overflow:hidden;
+}
+.deck{position:fixed; inset:0;}
+.slide{
+  position:absolute; inset:0; opacity:0; visibility:hidden;
+  display:flex; flex-direction:column; justify-content:center;
+  background:var(--paper); transition:opacity .35s ease;
+}
+.slide.active{opacity:1; visibility:visible; z-index:2;}
+.slide-inner{
+  width:100%; max-width:1440px; margin:0 auto;
+  padding:clamp(1.1rem,2.8vh,2.2rem) clamp(1.4rem,3vw,2.6rem);
+}
+.slide-inner.two-col{display:grid; grid-template-columns:1.05fr .95fr; gap:clamp(1.5rem,3.5vw,3.5rem); align-items:center;}
+.slide-inner.one-col,.slide-inner.col{display:flex; flex-direction:column; justify-content:center;}
+
+/* typography */
+h1,h2,h3,.heading{font-family:'Merriweather',Georgia,serif;}
+.eyebrow{font-size:clamp(.72rem,1.35vw,.92rem); font-weight:700; letter-spacing:.04em;
+  text-transform:uppercase; color:var(--accent,var(--green)); margin-bottom:.7rem;}
+.eyebrow::before{content:""; display:inline-block; width:.6em; height:.6em; border-radius:2px;
+  background:var(--accent,var(--green)); margin-right:.5em; transform:translateY(.02em);}
+.eyebrow.light{color:var(--green-light);}
+.eyebrow.light::before{display:none;}
+.heading{font-size:clamp(1.5rem,3.4vw,2.5rem); line-height:1.12; color:var(--forest); font-weight:800; margin-bottom:1rem;}
+.lead{font-size:clamp(.95rem,1.55vw,1.12rem); line-height:1.5; color:#33453d; margin-bottom:1.1rem; max-width:60ch;}
+.lead.center{text-align:center; margin:0 auto 1.6rem;}
+.bullets{list-style:none; display:flex; flex-direction:column; gap:.7rem;}
+.bullets li{position:relative; padding-left:1.5rem; font-size:clamp(.9rem,1.5vw,1.06rem); line-height:1.45; color:#2c3a34;}
+.bullets li::before{content:""; position:absolute; left:0; top:.5em; width:.5rem; height:.5rem;
+  border-radius:50%; background:var(--accent,var(--green-light));}
+.bullets li strong{color:var(--forest);}
+/* works-cited small print (content_slide refs=): sits under the content, set
+   small and muted with a hairline rule and a hanging indent, so a real citation
+   can appear on the slide without competing with the teaching text */
+.refs{margin-top:.9rem; padding-top:.5rem; border-top:1px solid var(--line);}
+/* a cited slide carries an extra block, so tighten its rhythm to keep the
+   citation above the fold on a 16:9 projector */
+.slide.has-refs .bullets{gap:.5rem;}
+.slide.has-refs .lead{margin-bottom:.8rem;}
+.slide.has-refs .heading{margin-bottom:.75rem;}
+.refs p{font-size:clamp(.6rem,.92vw,.72rem); line-height:1.4; color:var(--muted);
+  padding-left:1.15em; text-indent:-1.15em; margin-top:.3rem;}
+.refs p:first-child{margin-top:0;}
+.refs em{font-style:italic;}
+/* sub-bullet (authored as "- text"): indented under its parent, a shade smaller,
+   hollow marker so the hierarchy reads at projector distance */
+.bullets li.sub{padding-left:3rem; font-size:clamp(.82rem,1.32vw,.95rem); color:#48594f;
+  margin-top:-.25rem;}
+.bullets li.sub::before{left:1.55rem; top:.55em; width:.42rem; height:.42rem;
+  background:transparent; border:2px solid var(--accent,var(--green-light));}
+/* staged reveal (content_slide staged=True): fade each item in on a clicker
+   press. Opacity, not display, so the space is reserved up front and nothing
+   reflows as items appear. */
+.stage-item{opacity:0; transition:opacity .3s ease;}
+.stage-item.shown{opacity:1;}
+@media (prefers-reduced-motion:reduce){ .stage-item{transition:none;} }
+.note{margin-top:.85rem; padding:.62rem .95rem; background:var(--pale); border-left:3px solid var(--green);
+  border-radius:0 8px 8px 0; font-size:clamp(.8rem,1.25vw,.92rem); color:#3a4a43; font-style:italic;}
+.col-media{height:100%; display:flex; align-items:center;}
+.col-media img{width:100%; height:auto; max-height:74vh; object-fit:cover; border-radius:16px; box-shadow:var(--shadow);}
+
+/* pairs */
+.pairs{display:flex; flex-direction:column; gap:.5rem;}
+.pair{background:var(--pale); border:1px solid var(--line); border-radius:12px; padding:.62rem .95rem;}
+.pair-head{font-weight:700; color:var(--forest); font-size:clamp(.86rem,1.4vw,1rem);}
+.pair-desc{font-size:clamp(.8rem,1.3vw,.95rem); color:#3a4a43; line-height:1.4; margin-top:.15rem;}
+
+/* grids */
+.grid{display:grid; gap:clamp(.8rem,1.6vw,1.3rem); width:100%;}
+.grid.cols-2{grid-template-columns:repeat(2,1fr);}
+.grid.cols-3{grid-template-columns:repeat(3,1fr);}
+.grid.cols-4{grid-template-columns:repeat(4,1fr);}
+.gcard{background:var(--paper); border:1px solid var(--line); border-top:4px solid var(--accent,var(--green));
+  border-radius:14px; padding:clamp(.9rem,1.8vw,1.4rem); box-shadow:0 4px 14px rgba(20,40,30,.06);}
+.gcard-head{font-family:'Merriweather',serif; font-weight:700; color:var(--forest);
+  font-size:clamp(.95rem,1.5vw,1.12rem); margin-bottom:.45rem;}
+.gcard-desc{font-size:clamp(.82rem,1.3vw,.96rem); line-height:1.45; color:#3a4a43;}
+.gcard.img img{width:100%; height:clamp(110px,16vh,170px); object-fit:cover; border-radius:10px; margin-bottom:.7rem;}
+
+/* outline & objectives */
+.outline-grid{display:grid; grid-template-columns:1fr 1fr; gap:.7rem 2.2rem; margin-top:1rem;}
+.ol-item{display:flex; align-items:center; gap:1rem; padding:.7rem .4rem; border-bottom:1px solid var(--line);}
+.ol-num{font-family:'Merriweather',serif; font-weight:800; color:var(--accent,var(--green)); font-size:clamp(1.1rem,2vw,1.5rem); min-width:2.4rem;}
+.ol-text{font-size:clamp(.92rem,1.5vw,1.1rem); color:var(--forest); font-weight:600;}
+.obj-grid{display:grid; grid-template-columns:1fr 1fr; gap:1rem 2rem; margin-top:1.2rem;}
+.obj-item{display:flex; gap:1rem; align-items:flex-start;}
+.obj-num{flex:none; width:2.4rem; height:2.4rem; border-radius:50%; background:var(--forest-mid); color:#fff;
+  font-family:'Merriweather',serif; font-weight:700; display:flex; align-items:center; justify-content:center; font-size:1.1rem;}
+.obj-text{font-size:clamp(.9rem,1.45vw,1.05rem); line-height:1.4; color:#2c3a34; padding-top:.35rem;}
+
+/* quote */
+.bigquote{font-family:'Merriweather',serif; font-size:clamp(1.4rem,3vw,2.2rem); line-height:1.25;
+  color:var(--forest); font-style:italic; margin-bottom:1.2rem;}
+.bigquote cite{display:block; font-size:clamp(.9rem,1.4vw,1.05rem); font-style:normal; color:var(--green);
+  font-family:'Inter',sans-serif; font-weight:600; margin-top:.6rem;}
+
+/* footer */
+.footer{position:absolute; bottom:1rem; right:1.6rem; font-size:.72rem; color:#9bb0a6;}
+.footer.light{color:rgba(255,255,255,.7);}
+
+/* title slides */
+.title-slide{justify-content:flex-end;}
+img.bleed{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
+.title-slide img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
+.title-scrim{position:absolute; inset:0;
+  background:linear-gradient(90deg, rgba(10,25,18,.86) 0%, rgba(10,25,18,.55) 50%, rgba(10,25,18,.2) 100%);}
+.title-content{position:relative; z-index:2; padding:0 clamp(2.5rem,7vw,6rem) clamp(3rem,9vh,6rem); color:#fff; max-width:60rem;}
+.chapter-kicker{font-size:clamp(.9rem,1.6vw,1.1rem); font-weight:700; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--green-light); margin-bottom:.6rem;}
+.mega{font-size:clamp(4rem,13vw,9rem); line-height:.95; font-weight:900; letter-spacing:-.01em;}
+.title-sub{font-family:'Merriweather',serif; font-size:clamp(1.3rem,3.2vw,2.4rem); font-weight:400; margin-top:.4rem; color:#eaf5ef;}
+.title-tag{margin-top:1.6rem; font-style:italic; font-size:clamp(1rem,1.9vw,1.4rem); color:var(--green-light);
+  border-left:3px solid var(--green-light); padding-left:1rem;}
+
+/* sim slides */
+.slide.sim{background:#0e1a15; padding:0;}
+.sim-bar{display:flex; align-items:center; justify-content:space-between; gap:1.5rem;
+  padding:.9rem clamp(1.2rem,3vw,2.2rem); background:linear-gradient(120deg,#143027,#1d4438); color:#fff;}
+.sim-bar-text .eyebrow{margin-bottom:.2rem;}
+.sim-title{font-size:clamp(1.15rem,2.4vw,1.8rem); color:#fff; font-weight:800; line-height:1;}
+.sim-q{font-size:clamp(.78rem,1.3vw,.95rem); color:#bfe3d3; margin-top:.35rem;}
+.sim-open{flex:none; background:var(--green-light); color:#0e1a15; font-weight:700; text-decoration:none;
+  padding:.6rem 1.1rem; border-radius:10px; font-size:.85rem; white-space:nowrap; transition:background .15s;}
+.sim-open:hover{background:#9fe0c0;}
+.sim-note{background:#3a2c12; color:#ffe6b8; font-size:.82rem; padding:.5rem clamp(1.2rem,3vw,2.2rem); line-height:1.4;}
+.sim-frame-wrap{flex:1; min-height:0; background:#fff;}
+.sim-frame{width:100%; height:100%; border:0; display:block; background:#fff;}
+
+/* embed slides (interactive chart / app under a slim light header) */
+.slide.embed{background:#fff; padding:0;}
+.embed-head{display:flex; align-items:flex-end; justify-content:space-between; gap:1.5rem;
+  padding:.85rem clamp(1.3rem,3vw,2.4rem) .8rem; border-bottom:1px solid var(--line); background:#fff;}
+.embed-head .eyebrow{margin-bottom:.25rem;}
+.embed-title{font-size:clamp(1.1rem,2.4vw,1.7rem); color:var(--forest); font-weight:800; line-height:1.05;}
+.embed-sub{font-size:clamp(.72rem,1.2vw,.86rem); color:var(--muted); margin-top:.3rem; max-width:80ch;}
+.embed-open{flex:none; align-self:center; background:var(--accent,var(--green)); color:#fff; font-weight:700;
+  text-decoration:none; padding:.5rem 1rem; border-radius:9px; font-size:.82rem; white-space:nowrap;
+  transition:filter .15s;}
+.embed-open:hover{filter:brightness(1.08);}
+.embed-wrap{flex:1; min-height:0; background:#fff;}
+.embed-frame{width:100%; height:100%; border:0; display:block; background:#fff;}
+
+/* nav chrome */
+.nav-btn{position:fixed; top:50%; transform:translateY(-50%); z-index:30;
+  width:clamp(40px,5vw,56px); height:clamp(40px,5vw,56px); border-radius:50%;
+  border:none; background:rgba(20,40,30,.32); color:#fff; font-size:1.4rem; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; transition:background .15s; backdrop-filter:blur(4px);}
+.nav-btn:hover{background:rgba(20,40,30,.6);}
+.nav-btn.prev{left:14px;} .nav-btn.next{right:14px;}
+.topbar{position:fixed; top:0; left:0; right:0; height:4px; background:rgba(255,255,255,.12); z-index:40;}
+.progress{height:100%; background:var(--green-light); width:0; transition:width .3s;}
+.hud{position:fixed; bottom:14px; left:50%; transform:translateX(-50%); z-index:40;
+  display:flex; align-items:center; gap:.5rem; background:rgba(14,26,21,.72); backdrop-filter:blur(6px);
+  padding:.4rem .55rem; border-radius:999px; box-shadow:0 6px 20px rgba(0,0,0,.25);}
+.hud button{background:none; border:none; color:#dbeee5; cursor:pointer; font-size:.95rem; padding:.3rem .55rem; border-radius:8px; line-height:1;}
+.hud button:hover{background:rgba(255,255,255,.12);}
+.hud .counter{color:#fff; font-size:.82rem; font-weight:600; min-width:3.2rem; text-align:center; font-variant-numeric:tabular-nums;}
+
+/* menu overlay */
+.menu{position:fixed; inset:0; z-index:60; background:rgba(8,16,12,.92); backdrop-filter:blur(8px);
+  display:none; padding:clamp(1.5rem,4vh,3rem); overflow:auto;}
+.menu.open{display:block;}
+.menu h3{color:#fff; font-family:'Merriweather',serif; margin-bottom:1.2rem; font-size:1.3rem;}
+.menu-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:.5rem; max-width:1100px; margin:0 auto;}
+.menu-item{display:flex; align-items:center; gap:.7rem; text-align:left; background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1); color:#e6f3ec; padding:.6rem .8rem; border-radius:10px; cursor:pointer;
+  font-size:.86rem; transition:background .15s;}
+.menu-item:hover{background:rgba(116,198,157,.22);}
+.menu-num{flex:none; width:1.7rem; height:1.7rem; border-radius:6px; background:var(--forest-mid); color:#fff;
+  display:flex; align-items:center; justify-content:center; font-size:.78rem; font-weight:700;}
+.menu-close{position:fixed; top:18px; right:22px; background:none; border:none; color:#fff; font-size:1.6rem; cursor:pointer; z-index:61;}
+
+/* half-bleed content layout (text left, edge-to-edge image right) */
+.bleed-grid{position:absolute; inset:0; display:grid; grid-template-columns:1.04fr .96fr;}
+.bleed-text{padding:clamp(1.4rem,4vh,2.8rem) clamp(1.5rem,3.4vw,3.2rem);
+  display:flex; flex-direction:column; justify-content:center; min-width:0; overflow:auto;}
+.bleed-media{position:relative; overflow:hidden; background:var(--pale);}
+.bleed-media::before{content:""; position:absolute; left:0; top:0; bottom:0; width:34px; z-index:3;
+  background:linear-gradient(90deg, rgba(20,40,30,.13), transparent); pointer-events:none;}
+.bleed-media.cover img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
+.bleed-media.contain{display:flex; align-items:center; justify-content:center;
+  padding:clamp(1.4rem,3.2vw,3rem); background:linear-gradient(155deg,#eef6f1,#dfeee6);}
+.bleed-media.contain img{max-width:100%; max-height:100%; object-fit:contain; background:#fff;
+  border-radius:12px; box-shadow:0 10px 30px rgba(20,40,30,.18); padding:6px;}
+
+/* stacked layout (text on top, wide image full-width below) */
+.stack-grid{position:absolute; inset:0; display:flex; flex-direction:column;}
+.stack-top{display:grid; grid-template-columns:minmax(240px,34%) 1fr;
+  gap:clamp(1.2rem,3vw,2.8rem); align-items:start;
+  padding:clamp(1.1rem,2.8vh,2rem) clamp(1.6rem,3.4vw,3.4rem) clamp(.7rem,1.6vh,1.1rem);}
+.stack-head .heading{margin-bottom:0;}
+.stack-body{min-width:0;}
+.stack-body .lead{margin-bottom:.7rem;}
+.stack-body .bullets{display:block; columns:2; column-gap:1.9rem;}
+.stack-body .bullets li{break-inside:avoid; margin-bottom:.5rem;}
+.stack-body .pairs{display:block; columns:2; column-gap:1.2rem;}
+.stack-body .pairs .pair{break-inside:avoid; margin-bottom:.55rem;}
+.stack-body .note{margin-top:.7rem;}
+.stack-media{flex:1; min-height:0; position:relative; display:flex; align-items:center; justify-content:center;
+  padding:clamp(.7rem,1.8vh,1.2rem) clamp(1.6rem,3.4vw,3.4rem) clamp(2.2rem,4.5vh,3rem);
+  background:linear-gradient(180deg,#eef6f1,#dfeee6);}
+.stack-media::before{content:""; position:absolute; left:0; right:0; top:0; height:24px; z-index:2;
+  background:linear-gradient(180deg,rgba(20,40,30,.11),transparent); pointer-events:none;}
+.stack-media.contain img,.stack-media img{max-width:100%; max-height:100%; object-fit:contain;
+  background:#fff; border-radius:12px; box-shadow:0 10px 30px rgba(20,40,30,.18); padding:6px;}
+
+/* stat callouts */
+.stat-row{display:flex; flex-wrap:wrap; gap:.7rem; margin:.2rem 0 1.1rem;}
+.stat-box{flex:1 1 0; min-width:92px; background:#fff; border:1px solid var(--line);
+  border-top:3px solid var(--accent,var(--green)); border-radius:12px;
+  padding:.6rem .7rem .65rem; box-shadow:0 4px 14px rgba(20,40,30,.06);}
+.stat-num{font-family:'Merriweather',serif; font-weight:800; color:var(--accent,var(--forest));
+  font-size:clamp(1.35rem,2.9vw,2.1rem); line-height:1;}
+.stat-lbl{font-size:clamp(.66rem,1.05vw,.8rem); color:var(--muted); line-height:1.25; margin-top:.3rem;}
+
+@media (max-width:820px){
+  .slide-inner.two-col{grid-template-columns:1fr; gap:1.2rem;}
+  .col-media{order:-1;} .col-media img{max-height:34vh;}
+  .bleed-grid{position:static; display:flex; flex-direction:column; height:100%;}
+  .bleed-media{min-height:34vh;} .bleed-media.contain{min-height:30vh;}
+  .bleed-media::before{display:none;}
+  .stack-grid{position:static;}
+  .stack-top{grid-template-columns:1fr; gap:.4rem;}
+  .stack-body .bullets,.stack-body .pairs{grid-template-columns:1fr;}
+  .stack-media{min-height:34vh;}
+  .grid.cols-2{grid-template-columns:1fr;}
+  .grid.cols-3,.grid.cols-4{grid-template-columns:1fr 1fr;}
+  .outline-grid,.obj-grid{grid-template-columns:1fr;}
+  .slide{justify-content:flex-start; overflow-y:auto;}
+}
+
+
+/* ═══ shared interactive-slide framework (ix-*) ═══ */
+.ix-inner{max-width:80rem; margin:0 auto; width:100%; padding-inline:clamp(3.4rem,6vw,5rem);}
+[hidden]{display:none !important;}
+.ix-head{font-size:clamp(1.15rem,2.4vw,1.85rem); margin-bottom:.35rem;}
+.ix-svg{width:100%; height:auto; display:block;}
+.ix-src{font-size:.72rem; color:#6b7d75; margin-top:.55rem; line-height:1.45;}
+@keyframes ix-dash{to{stroke-dashoffset:-48;}}
+@keyframes ix-pop{0%{transform:scale(.94);opacity:.3}100%{transform:scale(1);opacity:1}}
+@media(prefers-reduced-motion:reduce){.ix-svg *{animation:none!important;}}
+
+/* ══════════ MODULE 1 SET BUILDER ══════════ */
+.bd-slide{background:linear-gradient(160deg,#f8faf8,#eef3ef); padding:0;}
+.bd-root{position:absolute; inset:0; display:flex; flex-direction:column;
+  padding:clamp(.6rem,1.8vh,1.1rem) clamp(4.6rem,5.8vw,5.6rem) clamp(.5rem,1.4vh,.9rem);}
+.bd-top{display:flex; align-items:flex-end; justify-content:space-between; gap:1rem; flex-wrap:wrap; margin-bottom:.5rem;}
+.bd-h{font-size:clamp(1.05rem,2.1vw,1.6rem); margin-bottom:0;}
+.bd-toolbar{display:flex; align-items:center; gap:.4rem; flex-wrap:wrap;}
+.bd-name{font:inherit; font-weight:700; font-size:.8rem; color:var(--forest); background:#fff;
+  border:1.5px solid var(--line); border-radius:9px; padding:.35rem .6rem; width:9.4rem;}
+.bd-who{width:7.4rem; font-weight:600;}
+.bd-btn.pdf{background:var(--forest-mid); border-color:var(--forest-mid); color:#fff;}
+.bd-btn.pdf:hover{filter:brightness(1.12); border-color:var(--forest-mid);}
+.bd-btn.expl{border-color:var(--forest-mid); color:var(--forest-mid);}
+.bd-btn.expl:hover{background:#eef4f0;}
+/* explanation modal */
+.bd-modal{position:absolute; inset:0; z-index:40; display:flex; align-items:center; justify-content:center;
+  background:rgba(12,26,20,.5); backdrop-filter:blur(2px); padding:clamp(1rem,4vh,3rem) 1rem;}
+.bd-modal-card{background:#fff; border-radius:16px; box-shadow:0 24px 60px rgba(12,26,20,.35);
+  width:min(58rem,100%); max-height:100%; display:flex; flex-direction:column;
+  padding:clamp(.9rem,2.4vh,1.5rem) clamp(1rem,2.4vw,1.7rem) clamp(.8rem,2vh,1.2rem);}
+.bd-modal-head{display:flex; align-items:center; justify-content:space-between; gap:1rem;}
+.bd-modal-head h3{font-family:'Merriweather',serif; font-size:clamp(1.05rem,2vw,1.4rem); color:var(--forest);}
+.bd-modal-x{font:inherit; font-size:1.5rem; line-height:1; color:#8c9a93; background:none; border:none;
+  cursor:pointer; padding:0 .2rem;}
+.bd-modal-x:hover{color:var(--forest);}
+.bd-modal-hint{font-size:clamp(.76rem,1.2vw,.9rem); color:#5b6b63; margin:.25rem 0 .5rem; line-height:1.4;}
+.bd-modal-hint b{color:var(--forest);}
+.bd-modal-ta{flex:1; min-height:min(46vh,22rem); width:100%; resize:vertical; font:inherit;
+  font-size:clamp(.82rem,1.25vw,.95rem); line-height:1.6; color:#22302b; background:#fbfcfb;
+  border:1.5px solid var(--line); border-radius:11px; padding:.7rem .85rem;}
+.bd-modal-ta:focus{outline:none; border-color:var(--forest-mid); background:#fff;}
+.bd-modal-foot{display:flex; align-items:center; gap:.5rem; margin-top:.6rem;}
+.bd-modal-note{flex:1; font-size:.74rem; color:#8c9a93; font-style:italic;}
+/* shock result card */
+.bd-shock-card{background:#fff; border-radius:16px; box-shadow:0 24px 60px rgba(12,26,20,.35);
+  width:min(33rem,100%); border-top:6px solid var(--sc,#40916C);
+  padding:clamp(1.1rem,3vh,1.7rem) clamp(1.1rem,2.6vw,1.7rem);
+  display:flex; flex-direction:column; gap:.5rem; animation:bd-pop .28s cubic-bezier(.2,1.1,.4,1);}
+@keyframes bd-pop{from{transform:scale(.94) translateY(6px); opacity:0;} to{transform:none; opacity:1;}}
+.bd-shock-status{display:flex; align-items:center; gap:.55rem;}
+.bd-shock-dot{width:.72rem; height:.72rem; border-radius:50%; background:var(--sc,#40916C); flex:none;}
+.bd-shock-word{font-family:'Merriweather',serif; font-weight:900; color:var(--sc,#40916C);
+  font-size:clamp(1.25rem,2.8vw,1.7rem); line-height:1;}
+.bd-shock-lead{font-size:clamp(.86rem,1.35vw,1rem); line-height:1.5; color:#22302b;}
+.bd-shock-lead b{color:var(--forest);}
+.bd-shock-body{font-size:clamp(.8rem,1.25vw,.94rem); line-height:1.55; color:#3a4a43;}
+.bd-shock-body b{color:var(--forest);} .bd-shock-body em{font-style:italic; color:var(--forest);}
+.bd-shock-sparkwrap{margin-top:.15rem;}
+.bd-shock-spark{width:100%; height:auto; display:block; background:#fbfcfb;
+  border:1px solid var(--line); border-radius:10px;}
+.bd-shock-cap{font-size:.72rem; color:#8c9a93; line-height:1.4; margin-top:.3rem;}
+.bd-shock-foot{display:flex; justify-content:flex-end; gap:.5rem; margin-top:.45rem;}
+.bd-name:focus{outline:none; border-color:var(--accent);}
+.bd-modes{display:flex; gap:.15rem; background:#e9efeb; border-radius:10px; padding:.15rem;}
+.bd-mode{font:inherit; font-weight:700; font-size:.76rem; cursor:pointer; color:#5b6b63;
+  background:transparent; border:none; border-radius:8px; padding:.35rem .65rem;}
+.bd-mode.active{background:#fff; color:var(--forest); box-shadow:0 1px 4px rgba(20,40,30,.14);}
+.bd-pol{display:flex; gap:.15rem; background:#e9efeb; border-radius:10px; padding:.15rem;}
+.bd-polbtn{font:inherit; font-weight:700; font-size:.74rem; cursor:pointer; color:#5b6b63;
+  background:transparent; border:none; border-radius:8px; padding:.35rem .6rem;}
+.bd-polbtn.active[data-pol="1"]{background:#2f7d4f; color:#fff;}
+.bd-polbtn.active[data-pol="-1"]{background:#A4373A; color:#fff;}
+.bd-preset,.bd-btn{font:inherit; font-weight:700; font-size:.76rem; cursor:pointer; color:var(--forest);
+  background:#fff; border:1.5px solid var(--line); border-radius:9px; padding:.35rem .6rem;}
+.bd-btn:hover,.bd-preset:hover{border-color:var(--accent);}
+.bd-body{flex:1; min-height:0; display:grid; grid-template-columns:172px 1fr 268px; gap:.6rem;}
+.bd-palette{overflow-y:auto; display:flex; flex-direction:column; gap:.45rem; padding-right:.15rem;}
+.bd-phint{font-size:.68rem; color:#6b7d75; line-height:1.35; font-style:italic;}
+.bd-pgroup{display:flex; flex-direction:column; gap:.18rem;}
+.bd-ptitle{font-size:.64rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--dc);
+  border-bottom:2px solid var(--dc); padding-bottom:.1rem; margin-bottom:.12rem;}
+.bd-pitem{display:flex; align-items:center; gap:.35rem; font:inherit; font-size:.7rem; font-weight:600;
+  color:#33453d; background:#fff; border:1.5px solid var(--line); border-radius:9px; padding:.14rem .3rem;
+  cursor:grab; text-align:left; touch-action:none; transition:all .12s;}
+.bd-pitem:hover{border-color:var(--dc); transform:translateX(2px);}
+.bd-pitem:active{cursor:grabbing;}
+.bd-picon{width:21px; height:21px; flex:none;}
+.bd-canvaswrap{min-width:0; min-height:0; display:flex; position:relative;}
+.bd-svg{width:100%; height:100%; background:#fff; border:1px solid var(--line); border-radius:14px;
+  box-shadow:var(--shadow); touch-action:none;}
+.bd-svg[data-mode="link"]{cursor:crosshair;}
+.bd-svg[data-mode="del"]{cursor:not-allowed;}
+.bd-empty{font:700 17px 'Inter',sans-serif; fill:#c2cec8;}
+.bd-node{cursor:pointer;}
+.bd-node .bd-blob{transition:fill .3s;}
+.bd-node.sel .bd-blob{stroke-width:5.5;}
+.bd-node.dragging{opacity:.85;}
+.bd-nlbl{font:700 12px 'Inter',sans-serif; fill:#33453d; pointer-events:none;
+  paint-order:stroke; stroke:#fff; stroke-width:3.5px; stroke-linejoin:round;}
+.bd-lsign{font:900 15px 'Inter',sans-serif; paint-order:stroke; stroke:#fff; stroke-width:4px; stroke-linejoin:round;}
+.bd-link{transition:stroke-width .15s;} .bd-link:hover{stroke-width:5.5;}
+.bd-halo{transition:opacity .3s, r .3s;}
+.bd-panel{overflow-y:auto; display:flex; flex-direction:column; gap:.45rem; min-height:0;}
+.bd-mix{background:#fff; border:1px solid var(--line); border-radius:11px; padding:.5rem .6rem;}
+.bd-mixrow{display:flex; align-items:center; gap:.4rem; font-size:.72rem; font-weight:700; color:#4a6055; margin-bottom:.22rem;}
+.bd-mixrow:last-child{margin-bottom:0;}
+.bd-mixrow i{font-style:normal; font-family:'Merriweather',serif; font-weight:900; color:var(--forest); min-width:1.1em;}
+.bd-dot{width:9px; height:9px; border-radius:3px; flex:none;}
+.bd-dot.s{background:#c9722b;} .bd-dot.e{background:#2f7d4f;} .bd-dot.t{background:#1C7293;}
+.bd-mixrow span:not(.bd-dot){min-width:5.2em;}
+.bd-mb{flex:1; height:7px; background:#eef2ef; border-radius:4px; overflow:hidden;}
+.bd-mb b{display:block; height:100%; width:0; border-radius:4px; transition:width .35s;}
+.bd-mixrow:nth-child(1) .bd-mb b{background:#c9722b;}
+.bd-mixrow:nth-child(2) .bd-mb b{background:#2f7d4f;}
+.bd-mixrow:nth-child(3) .bd-mb b{background:#1C7293;}
+.bd-checks{display:flex; flex-direction:column; gap:.14rem;}
+.bd-check{display:flex; align-items:flex-start; gap:.35rem; font-size:.72rem; font-weight:600; color:#96a49d; line-height:1.3;}
+.bd-check span{font-weight:900; color:#c5d0ca;}
+.bd-check.ok{color:var(--forest);} .bd-check.ok span{color:#2f7d4f;}
+.bd-loops{background:#fff; border:1px solid var(--line); border-radius:11px; padding:.5rem .6rem;}
+.bd-loops-h{font-size:.64rem; font-weight:800; letter-spacing:.07em; text-transform:uppercase; color:#6b7d75;
+  display:flex; justify-content:space-between; gap:.4rem; margin-bottom:.3rem;}
+.bd-lcount{color:var(--forest); letter-spacing:0; text-transform:none; font-size:.9em;}
+.bd-nol{font-size:.7rem; color:#8c9a93; line-height:1.35; font-style:italic;}
+.bd-loop{font-size:.68rem; line-height:1.3; color:#33453d; padding:.2rem .3rem; border-radius:6px; margin-bottom:.12rem;}
+.bd-loop b{font-size:.92em; text-transform:uppercase; letter-spacing:.03em;}
+.bd-loop.rein{background:#fdf1f1;} .bd-loop.rein b{color:#A4373A;}
+.bd-loop.bal{background:#eef6f0;} .bd-loop.bal b{color:#2f7d4f;}
+.bd-loopmore{font-size:.66rem; color:#8c9a93;}
+.bd-sim{background:#fff; border:1px solid var(--line); border-radius:11px; padding:.5rem .6rem;}
+.bd-run{width:100%; font:inherit; font-weight:800; font-size:.82rem; cursor:pointer; color:#fff;
+  background:#BC8A2E; border:none; border-radius:9px; padding:.45rem;}
+.bd-run:hover{filter:brightness(1.08);}
+.bd-runhint{font-size:.7rem; color:#5b6b63; line-height:1.35; margin-top:.3rem;}
+.bd-runhint strong,.bd-runhint b{color:var(--forest);}
+.bd-spark{width:100%; height:auto; margin-top:.2rem;}
+.bd-sparklbl{font:600 8.5px 'Inter',sans-serif; fill:#8c9a93;}
+.bd-verdict{background:#f3f8f5; border-left:4px solid var(--accent); border-radius:9px; padding:.5rem .65rem;
+  font-size:.74rem; line-height:1.45; color:#33453d;}
+.bd-verdict b{color:var(--forest);} .bd-verdict em{color:var(--forest); font-style:italic;}
+@media(max-width:1180px){.bd-body{grid-template-columns:150px 1fr 230px;}}
+
+
+/* ── Module 1 assignment additions ───────────────────────────────────────── */
+.bd-polbtn.active[data-pol="2"]{background:#6a8f2f; color:#fff;}
+.bd-psub{font-size:.6rem; color:#7d8f80; line-height:1.3; font-style:italic; margin:-.02rem 0 .1rem;}
+.bd-psub b{color:#6a8f2f; font-style:normal;}
+
+/* biome + ecological-characteristics band */
+.bd-biome{display:grid; grid-template-columns:auto repeat(3,minmax(0,1fr)); gap:.45rem;
+  align-items:center; background:#fff; border:1px solid var(--line); border-radius:11px;
+  padding:.34rem .5rem; margin-bottom:.5rem; box-shadow:0 2px 8px rgba(20,40,30,.05);}
+.bd-bsel{font:inherit; font-weight:800; font-size:.76rem; color:var(--forest); background:#f3f8f5;
+  border:1.5px solid var(--line); border-radius:9px; padding:.34rem .5rem; cursor:pointer;}
+.bd-bsel:focus{outline:none; border-color:#6a8f2f;}
+.bd-bfield{display:flex; flex-direction:column; gap:.06rem; min-width:0;}
+.bd-bfield span{font-size:.56rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#6a8f2f;}
+.bd-bfield input{font:inherit; font-size:.71rem; color:#22302b; background:#fbfcfb; min-width:0;
+  border:1px solid var(--line); border-radius:7px; padding:.22rem .4rem;}
+.bd-bfield input:focus{outline:none; border-color:#6a8f2f; background:#fff;}
+
+/* two-group checklist */
+.bd-ckh{display:flex; justify-content:space-between; align-items:baseline; gap:.4rem;
+  font-size:.6rem; font-weight:800; letter-spacing:.07em; text-transform:uppercase; color:#6b7d75;
+  margin:.3rem 0 .14rem; padding-bottom:.1rem; border-bottom:1px solid var(--line);}
+.bd-ckh:first-child{margin-top:0;}
+.bd-ckh b{letter-spacing:0; text-transform:none; font-size:.95em; color:var(--forest);}
+
+/* write-up modal: scrolling body of labelled fields */
+.bd-modal-body{flex:1; min-height:0; overflow-y:auto; display:flex; flex-direction:column;
+  gap:.7rem; padding-right:.35rem;}
+.bd-fsec{display:flex; flex-direction:column; gap:.3rem;}
+.bd-flabel{font-size:.66rem; font-weight:800; letter-spacing:.07em; text-transform:uppercase;
+  color:var(--forest-mid); border-bottom:1px solid var(--line); padding-bottom:.14rem;}
+.bd-flabel em{font-weight:600; letter-spacing:0; text-transform:none; color:#8c9a93; font-style:italic;}
+.bd-frow{display:flex; gap:.35rem; align-items:stretch;}
+.bd-fin{font:inherit; font-size:clamp(.78rem,1.15vw,.9rem); line-height:1.5; color:#22302b;
+  background:#fbfcfb; border:1.5px solid var(--line); border-radius:10px; padding:.42rem .6rem; width:100%;}
+.bd-fin:focus{outline:none; border-color:var(--forest-mid); background:#fff;}
+.bd-fkind{width:auto; flex:none; font-weight:800; color:var(--forest); cursor:pointer;}
+.bd-fta{resize:vertical;}
+.bd-fta.short{min-height:3.1rem;}
+.bd-modal-ta{min-height:min(19vh,8.5rem);}
+.bd-cb{display:flex; align-items:center; gap:.4rem; font-size:.76rem; color:#5b6b63; cursor:pointer;}
+.bd-cb input{accent-color:var(--forest-mid); width:.9rem; height:.9rem;}
+
+@media(max-width:1180px){
+  .bd-biome{grid-template-columns:auto repeat(3,minmax(0,1fr)); gap:.3rem;}
+  .bd-bfield input{font-size:.66rem;}
+}
+
+/* custom pieces + rename-in-place */
+.bd-pitem.bd-pcustom{border-style:dashed; color:#6b7d75;}
+.bd-pitem.bd-pcustom span{font-style:italic;}
+.bd-pitem.bd-pcustom:hover{color:#33453d;}
+.bd-rename{position:absolute; z-index:14; transform:translateX(-50%);
+  display:flex; flex-direction:column; align-items:center; gap:.14rem;}
+.bd-renameinput{font:inherit; font-weight:700; font-size:.78rem; text-align:center; color:#22302b;
+  background:#fff; border:2px solid var(--accent); border-radius:9px; padding:.24rem .5rem; width:11.5rem;
+  box-shadow:0 8px 22px rgba(20,40,30,.2);}
+.bd-renameinput:focus{outline:none;}
+.bd-renamehint{font-size:.58rem; font-weight:600; color:#6b7d75; background:#fff;
+  border-radius:4px; padding:.02rem .3rem; box-shadow:0 2px 6px rgba(20,40,30,.1);}
+
+
+/* ── standalone-only: no deck chrome, so reclaim the side padding ── */
+/* The engine pins .footer bottom-right, where it lands on top of the analysis
+   panel's "Shock the system" button. Reserve a strip for it and centre it. */
+.bd-root{padding-inline:clamp(.9rem,2.6vw,2rem); bottom:1.5rem;}
+.footer{left:0; right:0; bottom:.4rem; text-align:center;}
+.bd-sub{font-size:clamp(.74rem,1.18vw,.9rem); color:#5b6b63; line-height:1.45;
+  margin-top:.22rem; max-width:96ch;}
+.bd-sub b{font-weight:900;}
+.bd-sub b.pos{color:#2f7d4f;} .bd-sub b.neg{color:#A4373A;} .bd-sub b.tro{color:#6a8f2f;}
+.footer{color:#9bb0a6;}
+/* narrow screens: become a normal scrolling page, palette wraps into chip rows */
+@media(max-width:900px){
+  body{overflow:auto;}
+  .deck{position:static;}
+  .slide{position:static; min-height:100vh; display:block;}
+  .bd-root{position:static; padding-bottom:1rem;}
+  .bd-body{grid-template-columns:1fr; gap:.8rem;}
+  .bd-palette{overflow:visible; gap:.6rem;}
+  .bd-pgroup{display:flex; flex-flow:row wrap; gap:.28rem;}
+  .bd-ptitle{flex:1 0 100%;}
+  .bd-psub{flex:1 0 100%;}
+  .bd-pitem{flex:0 1 auto;}
+  .bd-phint{display:none;}
+  .bd-biome{grid-template-columns:1fr; gap:.45rem;}
+  .bd-canvaswrap{min-height:62vh;}
+  .bd-panel{overflow:visible;}
+  .bd-top{align-items:flex-start;}
+  .footer{position:static; text-align:right; padding-top:.8rem;}
+}
+</style>
+</head>
+<body>
+<div class="deck">
+<section class="slide bd-slide active" data-type="setbuilder" style="--accent:#6a8f2f">
+  <div class="bd-root" data-bd>
+    <div class="bd-top">
+      <div class="bd-titlewrap">
+        <div class="eyebrow">SOS 110 &nbsp;·&nbsp; Module 1 Group Assignment</div>
+        <h2 class="heading bd-h">Build Your Own Socio-Ecological-Technical System</h2>
+        <p class="bd-sub">Pick your biome, note what grows there and how much it rains, then build the system: drag in social, ecological, <b class="tro">trophic</b> and technical pieces, run the food chain up with <b class="tro">&#9889;</b> energy arrows and everything else with <b class="pos">+</b> and <b class="neg">&minus;</b> arrows. Double-click any piece to rename it. When the checklist is full, <b>Save as PDF</b> and submit that on Canvas.</p>
+      </div>
+      <div class="bd-toolbar">
+        <input class="bd-name" data-name type="text" maxlength="42" placeholder="Title of your work…" aria-label="Title of your work">
+        <input class="bd-name bd-who" data-author type="text" maxlength="42" placeholder="Your name" aria-label="Your name">
+        <div class="bd-modes" role="group" aria-label="Tool">
+          <button class="bd-mode active" type="button" data-mode="move" title="Drag components around">✋ Move</button>
+          <button class="bd-mode" type="button" data-mode="link" title="Drag from one component to another to connect them">➜ Connect</button>
+          <button class="bd-mode" type="button" data-mode="del" title="Click a component or arrow to remove it">✂ Remove</button>
+        </div>
+        <div class="bd-pol" data-polwrap hidden>
+          <button class="bd-polbtn active" type="button" data-pol="1">+ amplifies</button>
+          <button class="bd-polbtn" type="button" data-pol="-1">− dampens</button>
+          <button class="bd-polbtn" type="button" data-pol="2" title="Energy flows from one trophic level to the next">⚡ energy to</button>
+        </div>
+        <select class="bd-preset" data-preset aria-label="Load an example">
+          <option value="">Load a worked example…</option>
+          <option value="reef">Coral reef &amp; fishing town</option>
+          <option value="fishery">Managed fishery</option>
+          <option value="fashion">Fast fashion</option>
+        </select>
+        <button class="bd-btn ghost" type="button" data-clear>Clear</button>
+        <button class="bd-btn expl" type="button" data-explbtn title="Your sustainability lens, explanation and AI note">✎ Write-up</button>
+        <button class="bd-btn pdf" type="button" data-pdf title="Opens your browser's print dialog — choose “Save as PDF”">⤓ Save as PDF</button>
+      </div>
+    </div>
+
+    <!-- ── biome + ecological characteristics (assignment step 1 & 2a) ── -->
+    <div class="bd-biome" data-biomebar>
+      <select class="bd-bsel" data-biome aria-label="Biome or ecosystem">
+        <option value="">Choose your biome…</option>
+        <option value="desert">Desert</option><option value="rainforest">Tropical Rainforest</option><option value="tempforest">Temperate Forest</option><option value="tundra">Tundra</option><option value="freshwater">Freshwater</option><option value="marine">Marine</option><option value="boreal">Boreal Forest</option><option value="grassland">Grassland</option><option value="ice">Ice Ecosystems</option>
+      </select>
+      <label class="bd-bfield"><span>Dominant vegetation</span>
+        <input data-bveg type="text" maxlength="90" placeholder="what actually grows here"></label>
+      <label class="bd-bfield"><span>Precipitation</span>
+        <input data-bprecip type="text" maxlength="90" placeholder="how much, and when"></label>
+      <label class="bd-bfield"><span>Temperature</span>
+        <input data-btemp type="text" maxlength="90" placeholder="range and seasonality"></label>
+    </div>
+
+    <div class="bd-body">
+      <!-- ── palette ── -->
+      <div class="bd-palette" data-palette>
+        <div class="bd-phint">Drag a piece onto the canvas &mdash; or just click it.
+          <b>Double-click a piece to rename it.</b></div>
+      </div>
+
+      <!-- ── canvas ── -->
+      <div class="bd-canvaswrap">
+        <svg viewBox="0 0 1000 620" class="bd-svg" data-svg preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <filter id="bdRough" x="-8%" y="-8%" width="116%" height="116%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="3" seed="31" result="n"/>
+              <feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
+            <pattern id="bdPaper" width="26" height="26" patternUnits="userSpaceOnUse">
+              <path d="M26 0 L0 0 0 26" fill="none" stroke="#e8efe9" stroke-width="1.2"/>
+            </pattern>
+          </defs>
+          <rect x="0" y="0" width="1000" height="620" fill="url(#bdPaper)"/>
+          <g data-links></g>
+          <g data-nodes></g>
+          <g data-rubber></g>
+          <text data-empty x="500" y="316" text-anchor="middle" class="bd-empty">drop your first component here</text>
+        </svg>
+        <div class="bd-rename" data-rename hidden>
+          <input class="bd-renameinput" data-renameinput type="text" maxlength="28" spellcheck="false"
+            aria-label="Rename this component">
+          <div class="bd-renamehint">Enter to save &middot; Esc to cancel</div>
+        </div>
+      </div>
+
+      <!-- ── analysis ── -->
+      <div class="bd-panel">
+        <div class="bd-mix">
+          <div class="bd-mixrow"><span class="bd-dot s"></span>Social<i data-c="soc">0</i><div class="bd-mb"><b data-mb="soc"></b></div></div>
+          <div class="bd-mixrow"><span class="bd-dot e"></span>Ecological<i data-c="eco">0</i><div class="bd-mb"><b data-mb="eco"></b></div></div>
+          <div class="bd-mixrow"><span class="bd-dot t"></span>Technical<i data-c="tec">0</i><div class="bd-mb"><b data-mb="tec"></b></div></div>
+        </div>
+        <div class="bd-checks" data-checks></div>
+        <div class="bd-loops" data-loops></div>
+        <div class="bd-sim">
+          <button class="bd-run" type="button" data-run>⚡ Shock the system</button>
+          <div class="bd-runhint" data-runhint>Click a component first, then shock it — and watch what your system does with a small change.</div>
+          <svg viewBox="0 0 260 74" class="bd-spark" data-spark hidden></svg>
+        </div>
+        <div class="bd-verdict" data-verdict></div>
+      </div>
+    </div>
+
+    <!-- ── explanation ── -->
+    <div class="bd-modal" data-modal hidden>
+      <div class="bd-modal-card" role="dialog" aria-modal="true" aria-label="Write-up for this system">
+        <div class="bd-modal-head">
+          <h3>Write-up &amp; Sustainability Lens</h3>
+          <button class="bd-modal-x" type="button" data-modal-close aria-label="Close">&times;</button>
+        </div>
+        <p class="bd-modal-hint" data-modal-hint></p>
+        <div class="bd-modal-body">
+          <div class="bd-fsec">
+            <div class="bd-flabel">Sustainability lens <em>&mdash; one challenge or opportunity in this biome</em></div>
+            <div class="bd-frow">
+              <select class="bd-fin bd-fkind" data-lenskind aria-label="Challenge or opportunity">
+                <option value="Challenge">Challenge</option>
+                <option value="Opportunity">Opportunity</option>
+              </select>
+              <input class="bd-fin" data-lensname type="text" maxlength="110" spellcheck="true"
+                placeholder="Name it — e.g. deforestation for cattle pasture, or community-led rewilding" aria-label="Name the challenge or opportunity">
+            </div>
+            <textarea class="bd-fin bd-fta short" data-lenswhy spellcheck="true" rows="3"
+              placeholder="Why does it matter here? Which parts of your diagram does it push on, and along which arrows?" aria-label="Why it matters"></textarea>
+            <textarea class="bd-fin bd-fta short" data-lenshow spellcheck="true" rows="3"
+              placeholder="Potential solutions — what would you change, who would have to act, and which link on the diagram does it touch?" aria-label="Proposed solutions"></textarea>
+          </div>
+          <div class="bd-fsec">
+            <div class="bd-flabel">Explanation <em>&mdash; what the diagram shows</em></div>
+            <textarea class="bd-fin bd-modal-ta" data-expl spellcheck="true"
+              placeholder="Explain your system in plain language. Why did you choose these components? What does each one do to the others? Which loop matters most, and what would you change? You should be able to explain every term on your diagram."></textarea>
+          </div>
+          <div class="bd-fsec">
+            <div class="bd-flabel">Generative AI <em>&mdash; credit the specific parts</em></div>
+            <textarea class="bd-fin bd-fta short" data-ai spellcheck="true" rows="2"
+              placeholder="Which specific parts were AI-assisted? e.g. “I used AI to look up rainfall figures for the Sonoran Desert and to list apex predators; the diagram, arrows and write-up are mine.”" aria-label="AI use"></textarea>
+            <label class="bd-cb"><input type="checkbox" data-noai> I did not use generative AI on this assignment.</label>
+          </div>
+        </div>
+        <div class="bd-modal-foot">
+          <span class="bd-modal-note">Everything written here is printed on your PDF, under the diagram.</span>
+          <button class="bd-btn" type="button" data-expl-clear>Clear</button>
+          <button class="bd-btn pdf" type="button" data-modal-done>Done</button>
+        </div>
+      </div>
+    </div>
+    <!-- ── shock result ── -->
+    <div class="bd-modal bd-shockmodal" data-shockmodal hidden>
+      <div class="bd-shock-card" role="dialog" aria-modal="true" aria-label="What the shock did">
+        <div class="bd-shock-status"><span class="bd-shock-dot"></span><span class="bd-shock-word" data-shock-word></span></div>
+        <p class="bd-shock-lead" data-shock-lead></p>
+        <p class="bd-shock-body" data-shock-body></p>
+        <div class="bd-shock-sparkwrap" data-shock-sparkwrap>
+          <svg class="bd-shock-spark" data-shock-spark viewBox="0 0 260 78"></svg>
+          <div class="bd-shock-cap">The characteristic shape of this kind of response over time.</div>
+        </div>
+        <div class="bd-shock-foot">
+          <button class="bd-btn" type="button" data-shock-again>↻ Shock again</button>
+          <button class="bd-btn pdf" type="button" data-shock-close>Got it</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">SOS 110 &middot; Building a Sustainable World &middot; Ryan Cornell &nbsp;·&nbsp; Module 1 Group Assignment</div>
+  <script>(function(){
+    var root=document.currentScript.closest('.bd-slide');
+    if(!root||root.dataset.wired)return; root.dataset.wired='1';
+    var wrap=root.querySelector('[data-bd]'), svg=wrap.querySelector('[data-svg]');
+    var NAV=["ArrowLeft","ArrowRight","ArrowUp","ArrowDown"," ","PageUp","PageDown","Home","End"];
+    wrap.addEventListener('keydown',function(e){ if(NAV.indexOf(e.key)>-1) e.stopPropagation(); });
+    var NS='http://www.w3.org/2000/svg';
+    function el(n,at){ var e=document.createElementNS(NS,n); for(var k in at) e.setAttribute(k,at[k]); return e; }
+
+    var DOM={soc:{n:'Social',c:'#c9722b',f:'#fbeade'}, eco:{n:'Ecological',c:'#2f7d4f',f:'#e4f2e8'},
+             tro:{n:'Trophic levels',c:'#6a8f2f',f:'#f0f5e3'}, tec:{n:'Technical',c:'#1C7293',f:'#e2eff5'}};
+    var VIS=['soc','eco','tro','tec'];   /* palette + print order */
+    var ENERGY='#6a8f2f';                /* the "energy flows to" arrow */
+
+    /* ── hand-drawn icons (drawn in a 44×44 box centred on 0,0) ── */
+    var ICON={
+      house:'M-15 4 L0 -13 L15 4 M-11 2 v14 h22 v-14 M-3 16 v-9 h7 v9',
+      work:'M-14 -4 h28 v18 h-28 Z M-5 -4 v-6 h10 v6 M-14 4 h28',
+      gov:'M-16 14 h32 M-13 14 v-14 M-4 14 v-14 M5 14 v-14 M14 14 v-14 M-17 -2 L0 -14 L17 -2 Z',
+      culture:'M-15 -16 h12 q4 0 4 4 v6 q0 4 -4 4 h-6 l-5 5 v-5 h-1 q-4 0 -4 -4 v-6 q0 -4 4 -4 Z'+'M-1 -2 h12 q4 0 4 4 v6 q0 4 -4 4 h-1 v5 l-5 -5 h-6 q-4 0 -4 -4 v-6 q0 -4 4 -4 Z',
+      market:'M-16 -6 h32 M-13 -6 v18 h26 v-18 M-9 -6 q0 -9 9 -9 q9 0 9 9 M-4 4 h8',
+      equity:'M0 -14 v26 M-14 -8 h28 M-14 -8 l-5 12 h10 Z M14 -8 l-5 12 h10 Z M-9 14 h18',
+      water:'M0 -16 q13 15 13 24 a13 13 0 0 1 -26 0 q0 -9 13 -24 Z',
+      soil:'M-16 2 q16 8 32 0 M-16 8 q16 8 32 0 M-16 14 q16 8 32 0 M-6 2 q-2 -14 6 -18 M6 2 q2 -10 -4 -14',
+      air:'M-16 -6 q10 -12 20 -2 q12 -4 12 6 M-14 4 h22 q9 0 5 8 M-10 12 h14',
+      wild:'M-14.9 -7 a3.4 4.4 0 1 0 6.8 0 a3.4 4.4 0 1 0 -6.8 0'+'M-7.6 -13.5 a3.4 4.4 0 1 0 6.8 0 a3.4 4.4 0 1 0 -6.8 0'+'M0.8 -13.5 a3.4 4.4 0 1 0 6.8 0 a3.4 4.4 0 1 0 -6.8 0'+'M8.1 -7 a3.4 4.4 0 1 0 6.8 0 a3.4 4.4 0 1 0 -6.8 0'+'M0 -1 q8 0 10.5 6.5 q2 7.5 -4.5 10 q-6 2 -12 0 q-6.5 -2.5 -4.5 -10 q2.5 -6.5 10.5 -6.5 Z',
+      climate:'M0 -15 a9 9 0 1 0 0.1 0 M0 -26 v5 M0 21 v5 M-19 -1 h-6 M19 -1 h6 M-14 -15 l-4 -4 M14 -15 l4 -4 M-14 13 l-4 4 M14 13 l4 4',
+      forest:'M0 -16 l11 16 h-7 l9 13 h-26 l9 -13 h-7 Z M0 13 v6 M-13 6 l-6 13 h12',
+      grid:'M-8 -16 L2 -3 h-8 L4 16 M-16 12 v-24 M16 12 v-24 M-16 -12 h32 M-16 12 h32',
+      road:'M-14 16 L-4 -16 M14 16 L4 -16 M0 -12 v6 M0 0 v6 M0 12 v4',
+      pipe:'M-16 -8 h14 v16 h20 M-2 -8 a7 7 0 0 1 14 0 v4 M10 12 h8 M-16 -14 v12',
+      factory:'M-16 14 v-16 l10 6 v-6 l10 6 v-6 l12 6 v10 Z M6 -2 v-14 h6 v14 M-9 4 q-3 -8 3 -12',
+      data:'M-14 -10 a14 6 0 1 0 28 0 a14 6 0 1 0 -28 0 M-14 -10 v20 a14 6 0 0 0 28 0 v-20 M-14 0 a14 6 0 0 0 28 0',
+      waste:'M-12 -6 h24 l-3 20 h-18 Z M-15 -6 h30 M-6 -6 v-6 h12 v6 M-4 0 v12 M4 0 v12',
+      /* ── trophic levels (assignment step 2b) ── */
+      prod:'M0 17 v-22 M0 -5 q-15 0 -15 -13 q15 0 15 13 M0 1 q15 0 15 -13 q-15 0 -15 13',
+      herb:'M-2 3 a10 9 0 1 0 0.2 0 M-7 -6 q-4 -12 -1 -14 q4 3 3 13 M2 -7 q3 -12 6 -11 q2 4 -3 12 M8 9 q7 1 7 7 M-5 5 a1.4 1.4 0 1 0 0.1 0',
+      carn:'M-16 -8 q16 -8 32 0 M-10 -6 L-6 7 L-2 -5 M3 -5 L7 7 L11 -7',
+      apex:'M-16 9 L-13 -11 L-6 0 L0 -14 L6 0 L13 -11 L16 9 Z M-16 14 h32',
+      decomp:'M-15 -2 q0 -15 15 -15 q15 0 15 15 Z M-4 -2 v11 q0 5 4 5 q4 0 4 -5 v-11 M-8 -8 a2 2 0 1 0 0.1 0 M6 -9 a2 2 0 1 0 0.1 0 M-14 15 q5 4 10 0 M8 16 q5 4 9 0',
+      /* a blank piece you name yourself */
+      custom:'M-16 17 h32 M-14 6 L1 -9 l7 7 L-7 13 Z M-14 6 l-2 8 l8 -1 M1 -9 l4 -4 q2 -2 4 0 l3 3 q2 2 0 4 l-4 4'
+    };
+    /* d = which of the three SET systems it belongs to (drives the checks);
+       v = which palette group + colour it is drawn in. Trophic pieces are
+       ECOLOGICAL components drawn in their own colour, so a food chain on its
+       own still satisfies "all three systems represented". */
+    var TYPES=[
+      {id:'house',d:'soc',l:'Households'},   {id:'work',d:'soc',l:'Workers & jobs'},
+      {id:'gov',d:'soc',l:'Government'},     {id:'culture',d:'soc',l:'Culture & habits'},
+      {id:'market',d:'soc',l:'Markets & prices'}, {id:'equity',d:'soc',l:'Equity & voice'},
+      {id:'cust_soc',d:'soc',ic:'custom',l:'Custom…',custom:true,dflt:'Name this piece'},
+      {id:'water',d:'eco',l:'Water'},        {id:'soil',d:'eco',l:'Soil & land'},
+      {id:'air',d:'eco',l:'Air'},            {id:'wild',d:'eco',l:'Wildlife'},
+      {id:'climate',d:'eco',l:'Climate'},    {id:'forest',d:'eco',l:'Vegetation'},
+      {id:'cust_eco',d:'eco',ic:'custom',l:'Custom…',custom:true,dflt:'Name this piece'},
+      {id:'prod',d:'eco',v:'tro',l:'Producers'},
+      {id:'herb',d:'eco',v:'tro',l:'Primary consumers'},
+      {id:'carn',d:'eco',v:'tro',l:'Secondary consumers'},
+      {id:'apex',d:'eco',v:'tro',l:'Apex predators'},
+      {id:'decomp',d:'eco',v:'tro',l:'Decomposers'},
+      {id:'cust_tro',d:'eco',v:'tro',ic:'custom',l:'Custom…',custom:true,dflt:'Name this level'},
+      {id:'grid',d:'tec',l:'Power grid'},    {id:'road',d:'tec',l:'Roads & transit'},
+      {id:'pipe',d:'tec',l:'Water & sewer'}, {id:'factory',d:'tec',l:'Factories'},
+      {id:'data',d:'tec',l:'Data & sensors'},{id:'waste',d:'tec',l:'Waste & recycling'},
+      {id:'cust_tec',d:'tec',ic:'custom',l:'Custom…',custom:true,dflt:'Name this piece'}
+    ];
+    var TMAP={}; TYPES.forEach(function(t){ TMAP[t.id]=t; });
+    function visOf(t){ return t.v||t.d; }
+
+    /* ── state ── */
+    var nodes=[], links=[], uid=1, mode='move', pol=1, selected=null, simVals={};
+    var report={cnt:{soc:0,eco:0,tec:0}, cross:0, loops:[], tri:false, checks:[], verdict:''};
+    var gNodes=wrap.querySelector('[data-nodes]'), gLinks=wrap.querySelector('[data-links]'),
+        gRub=wrap.querySelector('[data-rubber]'), emptyTx=wrap.querySelector('[data-empty]');
+
+    function toSvg(e){ var p=svg.createSVGPoint(); p.x=e.clientX; p.y=e.clientY;
+      var m=svg.getScreenCTM(); return m? p.matrixTransform(m.inverse()) : {x:500,y:310}; }
+
+    /* ── palette ── */
+    var pal=wrap.querySelector('[data-palette]');
+    VIS.forEach(function(dk){
+      var h=document.createElement('div'); h.className='bd-pgroup'; h.style.setProperty('--dc',DOM[dk].c);
+      h.innerHTML='<div class="bd-ptitle">'+DOM[dk].n+'</div>'+
+        (dk==='tro'?'<div class="bd-psub">Join these with the <b>⚡ energy to</b> arrow &mdash; that is the food chain, not feedback.</div>':'');
+      TYPES.filter(function(t){return visOf(t)===dk;}).forEach(function(t){
+        var b=document.createElement('button'); b.type='button';
+        b.className='bd-pitem'+(t.custom?' bd-pcustom':'');
+        b.title=t.custom?'Add a blank piece and name it yourself':'Add '+t.l;
+        b.innerHTML='<svg viewBox="-24 -24 48 48" class="bd-picon"><path d="'+ICON[t.ic||t.id]+
+          '" fill="none" stroke="'+DOM[dk].c+'" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'+
+          '<span>'+t.l+'</span>';
+        b.addEventListener('pointerdown',function(e){ startPaletteDrag(e,b,t); });
+        h.appendChild(b);
+      });
+      pal.appendChild(h);
+    });
+
+    function startPaletteDrag(e,btn,t){
+      e.preventDefault();
+      var p=toSvg(e);
+      var n=addNode(t.id, Math.max(60,Math.min(940,p.x)), Math.max(60,Math.min(560,p.y)));
+      n.g.classList.add('dragging');
+      try{ btn.setPointerCapture(e.pointerId); }catch(err){}
+      function mv(ev){ var q=toSvg(ev); n.x=Math.max(52,Math.min(948,q.x)); n.y=Math.max(52,Math.min(566,q.y)); place(n); redrawLinks(); }
+      function up(ev){
+        btn.removeEventListener('pointermove',mv); btn.removeEventListener('pointerup',up); btn.removeEventListener('pointercancel',up);
+        try{ btn.releasePointerCapture(ev.pointerId); }catch(err){}
+        n.g.classList.remove('dragging');
+        var r=svg.getBoundingClientRect();
+        if(ev.clientX<r.left+4||ev.clientX>r.right-4||ev.clientY<r.top+4||ev.clientY>r.bottom-4) autoPlace(n);
+        analyse();
+        if(n.custom) setTimeout(function(){ openRename(n); }, 40);
+      }
+      btn.addEventListener('pointermove',mv); btn.addEventListener('pointerup',up); btn.addEventListener('pointercancel',up);
+    }
+    function autoPlace(n){
+      var slots=[[220,180],[420,150],[640,180],[790,300],[640,450],[420,480],[220,420],[500,310],[300,300],[700,300],[150,300],[850,180],[850,450]];
+      for(var i=0;i<slots.length;i++){
+        var ok=nodes.every(function(m){ return m===n || Math.hypot(m.x-slots[i][0],m.y-slots[i][1])>96; });
+        if(ok){ n.x=slots[i][0]; n.y=slots[i][1]; place(n); redrawLinks(); return; }
+      }
+      n.x=140+Math.random()*720; n.y=120+Math.random()*380; place(n); redrawLinks();
+    }
+
+    /* ── nodes ── */
+    function wrapLabel(s){
+      var w=s.split(' '), out=[''], i;
+      for(i=0;i<w.length;i++){
+        if((out[out.length-1]+' '+w[i]).trim().length>13 && out[out.length-1]) out.push(w[i]);
+        else out[out.length-1]=(out[out.length-1]+' '+w[i]).trim();
+      }
+      if(out.length>2){ out=out.slice(0,2); out[1]+='…'; }
+      return out;
+    }
+    function addNode(typeId,x,y){
+      var t=TMAP[typeId], dk=visOf(t);
+      var g=el('g',{class:'bd-node','data-dom':dk});
+      var halo=el('circle',{r:41,fill:'none',stroke:DOM[dk].c,'stroke-width':3,class:'bd-halo',opacity:'0'});
+      var blob=el('circle',{r:34,fill:DOM[dk].f,stroke:DOM[dk].c,'stroke-width':3.4,class:'bd-blob'});
+      var ic=el('path',{d:ICON[t.ic||typeId],fill:'none',stroke:DOM[dk].c,'stroke-width':2.8,'stroke-linecap':'round','stroke-linejoin':'round',transform:'scale(0.86)'});
+      var tx=el('text',{y:56,'text-anchor':'middle',class:'bd-nlbl'});
+      var lbl=t.dflt||t.l;
+      wrapLabel(lbl).forEach(function(line,i){ var ts=el('tspan',{x:0,dy:(i?14:0)}); ts.textContent=line; tx.appendChild(ts); });
+      g.appendChild(halo); g.appendChild(blob); g.appendChild(ic); g.appendChild(tx);
+      gNodes.appendChild(g);
+      var n={id:uid++, type:typeId, dom:t.d, vis:dk, label:lbl, custom:!!t.custom,
+             x:x, y:y, g:g, blob:blob, halo:halo, tx:tx};
+      nodes.push(n); place(n);
+      g.addEventListener('pointerdown',function(e){ onNodeDown(e,n); });
+      g.addEventListener('dblclick',function(e){
+        e.preventDefault(); e.stopPropagation();
+        if(mode!=='del') openRename(n);
+      });
+      emptyTx.style.display='none';
+      return n;
+    }
+    function place(n){ n.g.setAttribute('transform','translate('+n.x.toFixed(1)+','+n.y.toFixed(1)+')'); }
+
+    /* ── rename ──
+       Only the LABEL changes. n.dom (which SET system it belongs to) and n.type
+       (what the food-chain test looks for) are untouched, so renaming Producers
+       to "Saguaro & creosote" keeps every check working. */
+    function setLabel(n,txt){
+      n.label=txt;
+      while(n.tx.firstChild) n.tx.removeChild(n.tx.firstChild);
+      wrapLabel(txt).forEach(function(line,i){
+        var ts=el('tspan',{x:0,dy:(i?14:0)}); ts.textContent=line; n.tx.appendChild(ts); });
+    }
+    var renameBox=wrap.querySelector('[data-rename]'),
+        renameIn=wrap.querySelector('[data-renameinput]'),
+        canvasWrap=wrap.querySelector('.bd-canvaswrap'), renaming=null;
+    function openRename(n){
+      var m=svg.getScreenCTM(); if(!m) return;
+      renaming=n;
+      var p=svg.createSVGPoint(); p.x=n.x; p.y=n.y;
+      var q=p.matrixTransform(m), r=canvasWrap.getBoundingClientRect();
+      renameBox.style.left=(q.x-r.left)+'px';
+      renameBox.style.top=(q.y-r.top+38)+'px';
+      renameBox.hidden=false;
+      renameIn.value=n.label;
+      renameIn.focus(); renameIn.select();
+    }
+    function closeRename(save){
+      var n=renaming; renaming=null; renameBox.hidden=true;
+      if(n && save){ var t=(renameIn.value||'').trim(); if(t && t!==n.label){ setLabel(n,t); analyse(); } }
+    }
+    renameIn.addEventListener('keydown',function(e){
+      e.stopPropagation();
+      if(e.key==='Enter'){ e.preventDefault(); closeRename(true); }
+      else if(e.key==='Escape'){ e.preventDefault(); closeRename(false); }
+    });
+    renameIn.addEventListener('blur',function(){ if(renaming) closeRename(true); });
+
+    function onNodeDown(e,n){
+      e.preventDefault(); e.stopPropagation();
+      if(mode==='del'){ removeNode(n); analyse(); return; }
+      if(mode==='link'){ startLink(e,n); return; }
+      select(n);
+      var st=toSvg(e), ox=st.x-n.x, oy=st.y-n.y;
+      try{ n.g.setPointerCapture(e.pointerId); }catch(err){}
+      n.g.classList.add('dragging');
+      function mv(ev){ var q=toSvg(ev); n.x=Math.max(52,Math.min(948,q.x-ox)); n.y=Math.max(52,Math.min(566,q.y-oy)); place(n); redrawLinks(); }
+      function up(ev){ n.g.removeEventListener('pointermove',mv); n.g.removeEventListener('pointerup',up); n.g.removeEventListener('pointercancel',up);
+        try{ n.g.releasePointerCapture(ev.pointerId); }catch(err){} n.g.classList.remove('dragging'); analyse(); }
+      n.g.addEventListener('pointermove',mv); n.g.addEventListener('pointerup',up); n.g.addEventListener('pointercancel',up);
+    }
+    function select(n){
+      selected=n;
+      nodes.forEach(function(m){ m.g.classList.toggle('sel', m===n); });
+      var hint=wrap.querySelector('[data-runhint]');
+      if(n) hint.innerHTML='Ready: a small change starts at <strong>'+n.label+'</strong>.';
+    }
+    function removeNode(n){
+      if(renaming===n){ renaming=null; renameBox.hidden=true; }
+      links=links.filter(function(l){ if(l.a===n||l.b===n){ if(l.el)l.el.remove(); if(l.lbl)l.lbl.remove(); return false;} return true; });
+      n.g.remove(); nodes=nodes.filter(function(m){return m!==n;});
+      if(selected===n) selected=null;
+      if(!nodes.length) emptyTx.style.display='';
+      redrawLinks();
+    }
+
+    /* ── links ── */
+    function startLink(e,n){
+      var rub=el('path',{fill:'none',stroke:linkColor(pol),'stroke-width':3.4,'stroke-dasharray':'8 7','stroke-linecap':'round'});
+      gRub.appendChild(rub);
+      try{ n.g.setPointerCapture(e.pointerId); }catch(err){}
+      function mv(ev){ var q=toSvg(ev); rub.setAttribute('d','M'+n.x+' '+n.y+' L'+q.x+' '+q.y); }
+      function up(ev){
+        n.g.removeEventListener('pointermove',mv); n.g.removeEventListener('pointerup',up); n.g.removeEventListener('pointercancel',up);
+        try{ n.g.releasePointerCapture(ev.pointerId); }catch(err){}
+        rub.remove();
+        var q=toSvg(ev), tgt=null, best=1e9;
+        nodes.forEach(function(m){ if(m===n) return; var d=Math.hypot(m.x-q.x,m.y-q.y); if(d<46&&d<best){best=d;tgt=m;} });
+        if(tgt && !links.some(function(l){return l.a===n&&l.b===tgt;})){ links.push({a:n,b:tgt,p:pol}); redrawLinks(); analyse(); }
+      }
+      n.g.addEventListener('pointermove',mv); n.g.addEventListener('pointerup',up); n.g.addEventListener('pointercancel',up);
+    }
+    function linkColor(p){ return p===2?ENERGY:(p>0?'#2f7d4f':'#A4373A'); }
+    function linkGlyph(p){ return p===2?'⚡':(p>0?'+':'−'); }
+    function redrawLinks(){
+      gLinks.innerHTML='';
+      links.forEach(function(l){
+        var dx=l.b.x-l.a.x, dy=l.b.y-l.a.y, d=Math.hypot(dx,dy)||1, ux=dx/d, uy=dy/d;
+        var back=links.some(function(k){return k.a===l.b&&k.b===l.a;});
+        var bow=back?26:12;
+        var x1=l.a.x+ux*36, y1=l.a.y+uy*36, x2=l.b.x-ux*40, y2=l.b.y-uy*40;
+        var mx=(x1+x2)/2 - uy*bow, my=(y1+y2)/2 + ux*bow;
+        var col=linkColor(l.p);
+        var p=el('path',{d:'M'+x1+' '+y1+' Q'+mx+' '+my+' '+x2+' '+y2, fill:'none', stroke:col,
+                         'stroke-width':l.p===2?4.6:3.4,'stroke-linecap':'round',
+                         'stroke-dasharray':l.p===2?'1 9':'none', class:'bd-link'});
+        p.style.cursor='pointer';
+        p.addEventListener('pointerdown',function(e){
+          e.stopPropagation();
+          if(mode==='del'){ links=links.filter(function(k){return k!==l;}); redrawLinks(); analyse(); }
+          else { l.p = (l.p===1? -1 : (l.p===-1? 2 : 1)); redrawLinks(); analyse(); }   /* + → − → ⚡ → + */
+        });
+        gLinks.appendChild(p);
+        // arrowhead
+        var ang=Math.atan2(y2-my,x2-mx);
+        gLinks.appendChild(el('path',{d:'M'+(x2-13*Math.cos(ang-0.42))+' '+(y2-13*Math.sin(ang-0.42))+' L'+x2+' '+y2+
+          ' L'+(x2-13*Math.cos(ang+0.42))+' '+(y2-13*Math.sin(ang+0.42))+' Z', fill:col}));
+        var lb=el('text',{x:mx,y:my+5,'text-anchor':'middle',class:'bd-lsign',fill:col});
+        lb.textContent=linkGlyph(l.p); gLinks.appendChild(lb);
+        l.el=p; l.lbl=lb;
+      });
+    }
+
+    /* ── explanation ── */
+    var modal=wrap.querySelector('[data-modal]'), explEl=wrap.querySelector('[data-expl]'),
+        explHint=wrap.querySelector('[data-modal-hint]');
+    var explSource=null;   // name of the worked example the text came from, if any
+    function setExplanation(text, source){
+      explEl.value=text||''; explSource=source||null; syncHint();
+    }
+    function syncHint(){
+      explHint.innerHTML = explSource
+        ? 'This is the worked explanation for the <b>'+explSource+'</b> example \u2014 read it, and edit it if you disagree.'
+        : 'Your system, so this is yours to write. Everything below prints on your PDF \u2014 the sustainability lens, the explanation, and your note on which parts were AI-assisted.';
+    }
+    function openExpl(){ modal.hidden=false; setTimeout(function(){ (lName||explEl).focus(); },40); }
+    function closeExpl(){ modal.hidden=true; }
+    wrap.querySelector('[data-explbtn]').addEventListener('click',openExpl);
+    wrap.querySelector('[data-modal-close]').addEventListener('click',closeExpl);
+    wrap.querySelector('[data-modal-done]').addEventListener('click',closeExpl);
+    wrap.querySelector('[data-expl-clear]').addEventListener('click',function(){
+      clearWriteup(); explEl.focus(); analyse();
+    });
+    modal.addEventListener('pointerdown',function(e){ if(e.target===modal) closeExpl(); });
+    modal.addEventListener('keydown',function(e){
+      e.stopPropagation();
+      if(e.key==='Escape') closeExpl();
+    });
+    syncHint();
+
+    /* ── modes / toolbar ── */
+    wrap.querySelectorAll('.bd-mode').forEach(function(b){
+      b.addEventListener('click',function(){
+        wrap.querySelectorAll('.bd-mode').forEach(function(x){x.classList.remove('active');});
+        b.classList.add('active'); mode=b.dataset.mode;
+        wrap.querySelector('[data-polwrap]').hidden = (mode!=='link');
+        svg.dataset.mode=mode;
+      });
+    });
+    wrap.querySelectorAll('.bd-polbtn').forEach(function(b){
+      b.addEventListener('click',function(){
+        wrap.querySelectorAll('.bd-polbtn').forEach(function(x){x.classList.remove('active');});
+        b.classList.add('active'); pol=+b.dataset.pol;
+      });
+    });
+    wrap.querySelector('[data-clear]').addEventListener('click',function(){
+      nodes.slice().forEach(removeNode); links=[]; redrawLinks(); emptyTx.style.display='';
+      wrap.querySelector('[data-spark]').hidden=true;
+      clearWriteup(); analyse();
+    });
+
+    /* ── presets ── */
+    var PRESETS={
+      reef:{name:'Coral reef & fishing town', biome:'marine',
+        veg:'Zooxanthellae inside the corals, plus turf algae and seagrass beds',
+        pre:'Rainfall matters mostly as runoff \u2014 it carries sediment and nutrients onto the reef',
+        tmp:'Warm and narrow, 24\u201329 \u00b0C; corals bleach a degree or two above the summer maximum',
+        n:[['prod',140,110],['herb',140,280],['carn',140,450],['apex',350,480],
+           ['decomp',350,105],['climate',560,90],['pipe',380,290],
+           ['work',700,290],['market',890,140],['gov',690,490],['data',900,410]],
+        /* 0-4 food chain (⚡), then the causal system:
+           two loops pull on the same fleet — a REINFORCING price spiral
+           (apex→market− , market→fleet+ , fleet→apex−) and a BALANCING
+           survey-and-quota loop (apex→data+ , data→quota+ , quota→fleet+ ,
+           fleet→apex−). Climate and coastal treatment push in from outside. */
+        l:[[0,1,2],[1,2,2],[2,3,2],[3,4,2],[4,0,2],
+           [5,0,-1],[6,0,1],[9,6,1],
+           [7,3,-1],[3,8,-1],[8,7,1],
+           [3,10,1],[10,9,1],[9,7,1]]},
+      fashion:{name:'Fast fashion', expl:'Fast fashion — why this system is drawn the way it is.\n\nThis traces a cheap t-shirt from the moment somebody wants one to the river it eventually turns up in.\n\nHouseholds wanting more clothes push demand into the market (+), the market pushes orders to the factories (+), the factories hire (+), and wages send people back to the shops (+). Four amplifying links and not one dampening link, so this loop is reinforcing. Nothing inside it says stop. It is the engine of the whole system, and it is why the volume of clothing produced keeps climbing.\n\nThe second loop is the one meant to hold the first in check. Production degrades the freshwater downstream \u2014 dye, finishing, untreated effluent \u2014 so that link dampens (\u2212). Then comes the arrow whose sign is most often reversed. The node is Freshwater, the clean stock, not the pollution. Cleaner water means less reason to regulate; dirtier water means more. So freshwater to government dampens as well (\u2212). Regulation then dampens factory output (\u2212).\n\nThree dampening links, an odd number, so the regulatory loop is balancing: it genuinely pushes back. The lesson is not that it fails, but how easily it is outrun. The reinforcing loop turns on consumer demand and can double in a decade. The balancing loop waits on somebody measuring the river, publishing it, writing a rule, and enforcing it across a supply chain on the other side of the world. Two loops, opposite signs, wildly different speeds \u2014 and the fast one is winning.\n\nThis is a socio-ecological-technical system because the t-shirt is at once a social object, an industrial process and a discharge into a river, and no one of those three explains it alone.',
+        n:[['house',180,150],['market',430,120],['factory',700,180],['water',760,430],['work',430,470],['gov',170,400]],
+        l:[[0,1,1],[1,2,1],[2,3,-1],[2,4,1],[3,5,-1],[5,2,-1],[4,0,1]]},
+      fishery:{name:'Managed fishery', expl:'A fishery that holds — why this system is drawn the way it is.\n\nThis is the same commons problem as every fishery that ever collapsed, drawn with the one thing the collapsed ones were missing: a rule that listens.\n\nStart with the stock. More fish in the water means a higher reading on the annual survey (+), and a higher reading means the quota is set higher (+). A bigger quota puts more boats to sea (+), and more fishing takes fish out of the water (\u2212). Follow those four arrows around and you pass through exactly one dampening link. One negative makes this loop balancing: it self-corrects. A good year loosens the quota until the extra fishing pulls the stock back down; a thin year tightens it until the stock recovers. None of that is automatic \u2014 it works only because the quota is tied to the survey rather than to last year\u2019s catch.\n\nThe price loop is faster. A big landing floods the market and the price drops (\u2212), and a lower price sends fewer boats out (+). One dampening link, so this loop is balancing too, and it acts within a season rather than within a year.\n\nThe survey does one more job: it tells the fleet where the fish are not (+). That closes a third loop \u2014 better information, more effective fishing, fewer fish, a lower reading \u2014 with a single dampening link in it. Balancing again, and worth pausing on: here better technology does not run away with the resource, because it sits inside a loop that pushes back.\n\nThe community loop is the slow one. A stock that keeps producing keeps people invested in the fishery (+), and a community with a stake in it defends the rules instead of lobbying against them (+). That feeds the quota, which feeds the fleet, which feeds back on the stock (\u2212). One negative: balancing. This is the loop Elinor Ostrom spent a career documenting, and it is the first one to fail when a fishery is governed from far away.\n\nClimate sits outside all four loops. Warming water pushes on the stock (\u2212) and nothing in the fishery pushes back on the climate. It is a driver, not a participant \u2014 and it is why a system made entirely of balancing loops can still be walked slowly downhill.\n\nThat is the contrast with the other three examples. Every loop here settles, so a shock is absorbed instead of amplified. That is what people mean by a resilient system: not that nothing disturbs it, but that what disturbs it does not run away.',
+        n:[['wild',185,330],['data',400,130],['gov',690,160],['work',720,360],
+           ['market',540,465],['equity',275,465],['climate',160,140]],
+        l:[[0,1,1],[1,2,1],[2,3,1],[3,0,-1],[3,4,-1],[4,3,1],[1,3,1],[0,5,1],[5,2,1],[6,0,-1]]}
+    };
+    wrap.querySelector('[data-preset]').addEventListener('change',function(e){
+      var P=PRESETS[e.target.value]; if(!P) return;
+      nodes.slice().forEach(removeNode); links=[];
+      var made=P.n.map(function(o){ return addNode(o[0],o[1],o[2]); });
+      P.l.forEach(function(o){ links.push({a:made[o[0]],b:made[o[1]],p:o[2]}); });
+      wrap.querySelector('[data-name]').value=P.name;
+      if(P.biome && bSel){ bSel.value=P.biome; bVeg.value=P.veg||''; bPre.value=P.pre||''; bTmp.value=P.tmp||'';
+        seeded={veg:bVeg.value,pre:bPre.value,tmp:bTmp.value}; }
+      setExplanation('', null);   /* students write their own */
+      redrawLinks(); analyse(); e.target.value='';
+    });
+
+    /* ── loop detection (directed simple cycles, capped) ──
+       ⚡ energy arrows are DELIBERATELY excluded: they show where energy goes up
+       the food chain, not what causes what, so a producers→…→decomposers→producers
+       cycle is not reported as reinforcing feedback. Feedback comes from the +/−
+       arrows only. (The shock simulation still travels along energy arrows — a
+       change in the producers really does reach the apex predators.) */
+    function findLoops(){
+      var out=[], idx={}; nodes.forEach(function(n,i){idx[n.id]=i;});
+      var adj=nodes.map(function(){return [];});
+      links.forEach(function(l){ if(l.p===2) return; adj[idx[l.a.id]].push({j:idx[l.b.id],p:l.p}); });
+      var seen={};
+      function dfs(start,cur,path,signs){
+        if(out.length>=24||path.length>7) return;
+        adj[cur].forEach(function(e){
+          if(e.j===start){
+            var ring=path.slice().sort(function(a,b){return a-b;}).join(',');
+            if(!seen[ring]){ seen[ring]=1;
+              var neg=signs.concat([e.p]).filter(function(s){return s<0;}).length;
+              out.push({nodes:path.slice(), balancing:(neg%2===1)});
+            }
+            return;
+          }
+          if(e.j>start && path.indexOf(e.j)<0) dfs(start,e.j,path.concat([e.j]),signs.concat([e.p]));
+        });
+      }
+      for(var i=0;i<nodes.length;i++) dfs(i,i,[i],[]);
+      return out;
+    }
+
+    /* ── analysis ── */
+    var checksEl=wrap.querySelector('[data-checks]'), loopsEl=wrap.querySelector('[data-loops]'),
+        verdictEl=wrap.querySelector('[data-verdict]');
+    var loopsCache=[];
+
+    /* ── assignment fields ── */
+    var bSel=wrap.querySelector('[data-biome]'),  bVeg=wrap.querySelector('[data-bveg]'),
+        bPre=wrap.querySelector('[data-bprecip]'),bTmp=wrap.querySelector('[data-btemp]'),
+        lKind=wrap.querySelector('[data-lenskind]'), lName=wrap.querySelector('[data-lensname]'),
+        lWhy=wrap.querySelector('[data-lenswhy]'),   lHow=wrap.querySelector('[data-lenshow]'),
+        aiEl=wrap.querySelector('[data-ai]'),        noAi=wrap.querySelector('[data-noai]'),
+        nameEl=wrap.querySelector('[data-name]'),    whoEl=wrap.querySelector('[data-author]');
+    function fv(e){ return e ? (e.value||'').trim() : ''; }
+    function biomeLabel(){ return bSel && bSel.value ? bSel.options[bSel.selectedIndex].text : ''; }
+
+    /* a food chain = producers reach apex predators along ⚡ energy arrows */
+    function foodChain(){
+      var src=nodes.filter(function(n){return n.type==='prod';}),
+          top=nodes.filter(function(n){return n.type==='apex';});
+      if(!src.length||!top.length) return false;
+      var adj={}; nodes.forEach(function(n){ adj[n.id]=[]; });
+      links.forEach(function(l){ if(l.p===2) adj[l.a.id].push(l.b.id); });
+      var seen={}, stk=[];
+      src.forEach(function(n){ seen[n.id]=1; stk.push(n.id); });
+      while(stk.length){ var u=stk.pop(); (adj[u]||[]).forEach(function(w){ if(!seen[w]){ seen[w]=1; stk.push(w); } }); }
+      return top.some(function(n){ return !!seen[n.id]; });
+    }
+
+    function clearWriteup(){
+      setExplanation('',null);
+      [lName,lWhy,lHow,aiEl].forEach(function(e){ if(e) e.value=''; });
+      if(lKind) lKind.value='Challenge';
+      if(noAi) noAi.checked=false;
+    }
+    function analyse(){
+      var cnt={soc:0,eco:0,tec:0};
+      nodes.forEach(function(n){ cnt[n.dom]++; });
+      var tot=Math.max(1,cnt.soc+cnt.eco+cnt.tec);
+      ['soc','eco','tec'].forEach(function(k){
+        wrap.querySelector('[data-c="'+k+'"]').textContent=cnt[k];
+        wrap.querySelector('[data-mb="'+k+'"]').style.width=(cnt[k]/tot*100)+'%';
+      });
+      var cross=links.filter(function(l){ return l.a.dom!==l.b.dom; }).length;
+      loopsCache=findLoops();
+      var triLoop=loopsCache.some(function(L){
+        var s={}; L.nodes.forEach(function(i){ s[nodes[i].dom]=1; });
+        return s.soc&&s.eco&&s.tec;
+      });
+      var energyN=links.filter(function(l){ return l.p===2; }).length;
+      var sysChecks=[
+        {ok:(cnt.soc>0&&cnt.eco>0&&cnt.tec>0), t:'All three systems represented'},
+        {ok:cross>0, t:'At least one cross-system link ('+cross+')'},
+        {ok:loopsCache.length>0, t:'A feedback loop exists ('+loopsCache.length+')'}
+      ];
+      var asgChecks=[
+        {ok:!!biomeLabel(), t:'Biome chosen'+(biomeLabel()?': '+biomeLabel():'')},
+        {ok:!!(fv(bVeg)&&fv(bPre)&&fv(bTmp)), t:'Vegetation, precipitation and temperature filled in'},
+        {ok:foodChain(), t:'Food chain runs producers → apex predators ('+energyN+' ⚡ links)'},
+        {ok:!!fv(lName), t:'A challenge or opportunity is named'},
+        {ok:!!fv(lHow), t:'Potential solutions proposed'},
+        {ok:!!fv(explEl), t:'Explanation of the diagram written'},
+        {ok:!!(fv(aiEl)||(noAi&&noAi.checked)), t:'Generative-AI use declared'},
+        {ok:!!(fv(nameEl)&&fv(whoEl)), t:'Title and your name entered'}
+      ];
+      var checks=sysChecks.concat(asgChecks);
+      function tally(a){ return a.filter(function(c){return c.ok;}).length+'/'+a.length; }
+      function rows(a){ return a.map(function(c){
+        return '<div class="bd-check '+(c.ok?'ok':'')+'"><span>'+(c.ok?'✓':'○')+'</span>'+c.t+'</div>'; }).join(''); }
+      checksEl.innerHTML=
+        '<div class="bd-ckh">Does it behave like a system?<b>'+tally(sysChecks)+'</b></div>'+rows(sysChecks)+
+        '<div class="bd-ckh">Assignment checklist<b>'+tally(asgChecks)+'</b></div>'+rows(asgChecks);
+      if(!loopsCache.length){
+        loopsEl.innerHTML='<div class="bd-loops-h">Feedback loops</div><div class="bd-nol">None yet. A loop needs arrows that come back around — try connecting the last component back to the first.</div>';
+      } else {
+        var r=loopsCache.filter(function(L){return !L.balancing;}).length, b=loopsCache.length-r;
+        loopsEl.innerHTML='<div class="bd-loops-h">Feedback loops <span class="bd-lcount">'+r+' reinforcing · '+b+' balancing</span></div>'+
+          loopsCache.slice(0,3).map(function(L){
+            return '<div class="bd-loop '+(L.balancing?'bal':'rein')+'"><b>'+(L.balancing?'balancing':'reinforcing')+'</b> '+
+              L.nodes.map(function(i){return nodes[i].label;}).join(' → ')+' → …</div>';
+          }).join('') + (loopsCache.length>3?'<div class="bd-loopmore">+'+(loopsCache.length-3)+' more</div>':'');
+      }
+      var v;
+      if(!nodes.length) v='Start by dragging in one thing you actually care about. Then ask what it touches.';
+      else if(!(cnt.soc&&cnt.eco&&cnt.tec)) v='Right now this is a <em>part</em> of a system, not a system. What is missing from '+
+        (!cnt.soc?'the <b>social</b>':(!cnt.eco?'the <b>ecological</b>':'the <b>technical</b>'))+' side?';
+      else if(!cross) v='Three systems sitting on the same page are not yet interacting. Switch to <b>Connect</b> and draw an arrow between two different colours.';
+      else if(!loopsCache.length) v='Good — the systems are talking. But nothing comes back around yet, so nothing can amplify or self-correct. Close a loop.';
+      else if(!triLoop) v='You have feedback. Now try to close a loop that passes through <b>all three</b> colours: that is a socio-ecological-technical system.';
+      else v='<b>That is a SET.</b> Social, ecological and technical components in a loop that feeds back on itself — which means it can amplify, absorb, or tip. Shock it and see which.';
+      verdictEl.innerHTML=v;
+      report={cnt:cnt, cross:cross, loops:loopsCache, tri:triLoop, checks:checks,
+              sys:sysChecks, asg:asgChecks, verdict:v, energy:energyN,
+              tro:nodes.filter(function(n){return n.vis==='tro';}).length};
+    }
+
+    /* ── biome card: choosing a biome seeds editable starting values ── */
+    var BIOMES={
+      desert:{veg:'Sparse drought-adapted shrubs, cacti and succulents; much bare ground',
+              pre:'Under 25 cm a year, rare and unpredictable',
+              tmp:'Hot days, cold nights — a very large daily swing'},
+      rainforest:{veg:'Broadleaf evergreen trees in layered canopy, with lianas and epiphytes',
+              pre:'200–450 cm a year, falling all year round',
+              tmp:'Warm and remarkably stable, roughly 20–34 °C year-round'},
+      tempforest:{veg:'Deciduous broadleaf trees over shrub and herb layers',
+              pre:'75–150 cm a year, spread fairly evenly across the seasons',
+              tmp:'Four distinct seasons, roughly −30 °C to 30 °C'},
+      tundra:{veg:'Mosses, lichens, sedges and dwarf shrubs — no trees',
+              pre:'15–25 cm a year, mostly as snow',
+              tmp:'Long deep-frozen winters; a brief summer barely above freezing'},
+      freshwater:{veg:'Rooted macrophytes at the margins, algae and phytoplankton in open water',
+              pre:'Set by the watershed that drains into it, not by the water body itself',
+              tmp:'Varies with depth and season; summer thermal layering'},
+      marine:{veg:'Phytoplankton, kelp, seagrass, and algal symbionts inside corals',
+              pre:'Rainfall matters mainly as runoff; salinity and upwelling matter more',
+              tmp:'From −2 °C in polar water to about 30 °C in the tropics'},
+      boreal:{veg:'Coniferous evergreens — spruce, fir, pine — over a thick moss floor',
+              pre:'30–85 cm a year, much of it snow',
+              tmp:'Very cold winters lasting six months; short cool summers'},
+      grassland:{veg:'Grasses and forbs with deep root systems; few trees',
+              pre:'25–90 cm a year, strongly seasonal',
+              tmp:'Hot summers and cold winters; fire is a regular event'},
+      ice:{veg:'Almost none — snow algae, and lichens on exposed rock',
+              pre:'Under 25 cm a year in water equivalent',
+              tmp:'Below freezing for most or all of the year'}
+    };
+    var seeded={veg:'',pre:'',tmp:''};
+    function seedBiome(){
+      var B=BIOMES[bSel.value];
+      if(B){
+        if(!fv(bVeg)||bVeg.value===seeded.veg) bVeg.value=B.veg;
+        if(!fv(bPre)||bPre.value===seeded.pre) bPre.value=B.pre;
+        if(!fv(bTmp)||bTmp.value===seeded.tmp) bTmp.value=B.tmp;
+        seeded={veg:B.veg,pre:B.pre,tmp:B.tmp};
+      }
+      analyse();
+    }
+    if(bSel) bSel.addEventListener('change',seedBiome);
+    [bVeg,bPre,bTmp,lName,lWhy,lHow,aiEl,explEl,nameEl,whoEl].forEach(function(e){
+      if(e) e.addEventListener('input',analyse); });
+    [lKind,noAi].forEach(function(e){ if(e) e.addEventListener('change',analyse); });
+
+    /* ── shock simulation ── */
+    var spark=wrap.querySelector('[data-spark]');
+    var shockModal=wrap.querySelector('[data-shockmodal]');
+    var shockSpark=wrap.querySelector('[data-shock-spark]');
+    var shockResetT=null;
+    var SC={rein:'#A4373A', bal:'#2f7d4f', mid:'#BC8A2E', none:'#BC8A2E'};
+
+    function resetShockViz(){
+      nodes.forEach(function(n){ n.blob.setAttribute('fill',DOM[n.vis].f);
+        n.halo.setAttribute('opacity','0'); n.blob.style.filter=''; });
+    }
+    // The little chart shows the CHARACTERISTIC SHAPE of each response, so it always
+    // agrees with the structural verdict (a runaway climbs, a balancing loop oscillates,
+    // an absorbed shock rises then settles). It is an archetype, not the raw simulation.
+    function archetype(kind){
+      var N=48, ys=[];
+      for(var i=0;i<N;i++){ var t=i/(N-1), y;
+        if(kind==='rein'){ y=0.12+0.86/(1+Math.exp(-(t-0.5)*9)); }        // snowball → saturate
+        else if(kind==='bal'){ var k=6.5; y=0.14+0.82*(k*t)*Math.exp(1-k*t); } // rise, then settle
+        else { y=0.5+0.34*Math.sin(t*Math.PI*4)*Math.exp(-0.2*t); }        // sustained oscillation
+        ys.push(y);
+      }
+      return ys;
+    }
+    function drawCurve(svgEl, ys, color){
+      svgEl.innerHTML='';
+      var N=ys.length, X=function(i){ return 8+i/(N-1)*244; }, Y=function(y){ return 70-Math.max(0,Math.min(1,y))*56; };
+      svgEl.appendChild(el('path',{d:'M8 70 L252 70',stroke:'#e2e9e5','stroke-width':1.4}));
+      var d=''; ys.forEach(function(y,i){ d+=(i?' L':'M')+X(i).toFixed(1)+' '+Y(y).toFixed(1); });
+      svgEl.appendChild(el('path',{d:d,fill:'none',stroke:color,'stroke-width':2.8,
+        'stroke-linecap':'round','stroke-linejoin':'round'}));
+    }
+    function closeShock(){ shockModal.hidden=true; resetShockViz(); }
+    wrap.querySelector('[data-shock-close]').addEventListener('click',closeShock);
+    wrap.querySelector('[data-shock-again]').addEventListener('click',function(){ shockModal.hidden=true; runShock(); });
+    shockModal.addEventListener('pointerdown',function(e){ if(e.target===shockModal) closeShock(); });
+    shockModal.addEventListener('keydown',function(e){ e.stopPropagation(); if(e.key==='Escape') closeShock(); });
+
+    function showShockCard(out, hist){
+      var card=shockModal.querySelector('.bd-shock-card');
+      card.style.setProperty('--sc', SC[out.kind]);
+      shockModal.querySelector('[data-shock-word]').textContent=out.word;
+      shockModal.querySelector('[data-shock-lead]').innerHTML=out.lead;
+      shockModal.querySelector('[data-shock-body]').innerHTML=out.body;
+      var sw=shockModal.querySelector('[data-shock-sparkwrap]');
+      if(hist){ sw.hidden=false; drawCurve(shockSpark, archetype(out.kind), SC[out.kind]); } else { sw.hidden=true; }
+      shockModal.hidden=false;
+    }
+
+    function runShock(){
+      if(!nodes.length) return;
+      if(shockResetT){ clearTimeout(shockResetT); shockResetT=null; }
+      resetShockViz();
+      var start=selected||nodes[Math.floor(Math.random()*nodes.length)];
+      select(start);
+      var reinCount=report.loops.filter(function(L){return !L.balancing;}).length;
+      var balCount=report.loops.filter(function(L){return L.balancing;}).length;
+      function loopName(bal){
+        var L=report.loops.filter(function(x){return x.balancing===bal;})[0];
+        return L ? pesc(L.nodes.map(function(i){return nodes[i].label;}).join(' → ')+' → …') : '';
+      }
+      if(!links.length){
+        wrap.querySelector('[data-runhint]').innerHTML='Nothing is connected yet — draw some arrows, then shock it.';
+        showShockCard({kind:'none', word:'Nowhere to go',
+          lead:'You shocked <b>'+pesc(start.label)+'</b> — but nothing is connected to it yet.',
+          body:'A shock can only travel along arrows. Switch to <b>Connect</b>, draw a link or two, then shock it again to watch the change move through your system.'}, null);
+        return;
+      }
+      var idx={}; nodes.forEach(function(n,i){idx[n.id]=i;});
+      var val=nodes.map(function(){return 0;}); val[idx[start.id]]=1;
+      var ever=nodes.map(function(){return false;}); ever[idx[start.id]]=true;
+      var hist=[1], step=0;
+      (function frame(){
+        if(step++>9){ finish(); return; }
+        var nv=val.slice();
+        links.forEach(function(l){ nv[idx[l.b.id]] += (l.p===2?1:l.p)*val[idx[l.a.id]]*0.62; });
+        nv=nv.map(function(x){ return Math.max(-4,Math.min(4,x*0.94)); });
+        val=nv;
+        var mag=0; val.forEach(function(x,i){ mag+=Math.abs(x); if(Math.abs(x)>=0.12) ever[i]=true; }); hist.push(mag);
+        nodes.forEach(function(n,i){
+          var x=val[i], a=Math.min(1,Math.abs(x));
+          n.blob.setAttribute('fill', x>0.02? 'rgba(47,125,79,'+(0.15+0.7*a)+')' : (x<-0.02? 'rgba(164,55,58,'+(0.15+0.7*a)+')' : DOM[n.vis].f));
+          n.halo.setAttribute('opacity', a>0.15? (0.25+0.55*a).toFixed(2):'0');
+          n.halo.setAttribute('r', (38+14*a).toFixed(1));
+        });
+        setTimeout(frame, 380);
+      })();
+
+      function finish(){
+        var spread=0; ever.forEach(function(b,i){ if(b && i!==idx[start.id]) spread++; });
+        var spreadTxt = spread===0 ? 'the change stayed on <b>'+pesc(start.label)+'</b>'
+                        : 'the change spread to <b>'+spread+'</b> other component'+(spread>1?'s':'');
+
+        // Verdict comes from STRUCTURE (the same loops the panel lists), not from the
+        // noisy magnitude — so the card can never contradict the loop read-out. We ask
+        // what the shocked component can actually reach along the arrows.
+        var adj={}; nodes.forEach(function(n){ adj[n.id]=[]; });
+        links.forEach(function(l){ adj[l.a.id].push(l.b.id); });
+        var seen={}; seen[start.id]=true; var stk=[start.id];
+        while(stk.length){ var u=stk.pop(); adj[u].forEach(function(v){ if(!seen[v]){ seen[v]=true; stk.push(v); } }); }
+        function reaches(bal){
+          return report.loops.some(function(L){ return L.balancing===bal &&
+            L.nodes.some(function(i){ return seen[nodes[i].id]; }); });
+        }
+        var reinReach=reaches(false), balReach=reaches(true);
+
+        var out;
+        if(reinReach){
+          out={kind:'rein', word:'It ran away',
+            lead:'You shocked <b>'+pesc(start.label)+'</b> and '+spreadTxt+' — straight into a <b>reinforcing loop</b>.',
+            body:'Once the change reaches a loop like '+loopName(false)+', every trip around makes it <b>larger</b>. A small nudge snowballs into a big one — that is <em>non-linearity</em>, and it is how tipping points sneak up on people.'};
+        } else if(balReach){
+          out={kind:'mid', word:'It kept circulating',
+            lead:'You shocked <b>'+pesc(start.label)+'</b> and '+spreadTxt+', looping back through <b>balancing feedback</b>.',
+            body:'A balancing loop like '+loopName(true)+' keeps pushing the change back the other way, so instead of exploding or vanishing it <em>oscillates</em> — over-correcting one way, then the other. That steady give-and-take is what a balancing loop does; it settles into a rhythm rather than simply stopping.'};
+        } else {
+          out={kind:'bal', word:'The system absorbed it',
+            lead:'You shocked <b>'+pesc(start.label)+'</b> and '+spreadTxt+', but the disturbance <b>faded</b>.',
+            body: spread>0
+              ? 'The change rippled outward and then ran out of energy: with no loop to catch it and feed it back, it simply drained out of the system. That capacity to take a hit and return to normal is <em>resilience</em>.'
+              : 'With nothing leading out of <b>'+pesc(start.label)+'</b>, the shock had nowhere to travel and dissipated on the spot. Connect it to something and try again.'};
+        }
+        wrap.querySelector('[data-runhint]').innerHTML='<b>'+out.word+'.</b> Press ⚡ to run it again.';
+        spark.hidden=false; drawCurve(spark, archetype(out.kind), SC[out.kind]);
+        var t=el('text',{x:8,y:12,class:'bd-sparklbl'}); t.textContent='shape of the response'; spark.appendChild(t);
+        showShockCard(out, hist);
+        shockResetT=setTimeout(resetShockViz, 6000);
+      }
+    }
+    wrap.querySelector('[data-run]').addEventListener('click', runShock);
+
+    var PRINT_CSS =
+      "@page{size:letter portrait;margin:13mm}"+
+      "*{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}"+
+      "body{font:400 10.5pt/1.45 'Inter',Helvetica,Arial,sans-serif;color:#22302b}"+
+      ".pc-head{border-bottom:2.5px solid #2D6A4F;padding-bottom:7px;margin-bottom:12px}"+
+      ".pc-kicker{font-size:8pt;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#40916C}"+
+      ".pc-head h1{font-family:'Merriweather',Georgia,serif;font-size:20pt;font-weight:900;color:#1A3C34;line-height:1.12;margin:2px 0 3px}"+
+      ".pc-meta{font-size:9pt;color:#5b6b63}"+
+      ".pc-fig{border:1px solid #dde7e2;border-radius:9px;padding:6px;margin-bottom:12px;page-break-inside:avoid}"+
+      ".pc-fig svg{width:100%;height:auto;display:block}"+
+      ".pc-fig figcaption{font-size:8pt;color:#5b6b63;padding:5px 3px 1px;border-top:1px solid #eef2ef;margin-top:4px}"+
+      ".k{display:inline-block;width:8px;height:8px;border-radius:2px;margin:0 3px 0 8px;vertical-align:middle}"+
+      ".k.s{background:#c9722b;margin-left:0}.k.e{background:#2f7d4f}.k.t{background:#1C7293}"+
+      "b.pos{color:#2f7d4f}b.neg{color:#A4373A}b.eng{color:#6a8f2f}"+
+      ".k.r{background:#6a8f2f}"+
+      ".pc-biome{display:grid;grid-template-columns:auto 1fr 1fr 1fr;gap:0 10px;align-items:baseline;"+
+        "background:#f3f8f5;border:1px solid #dde7e2;border-radius:7px;padding:6px 9px;margin-bottom:10px}"+
+      ".pc-biome .bn{font-family:'Merriweather',Georgia,serif;font-size:11pt;font-weight:900;color:#1A3C34;"+
+        "padding-right:10px;border-right:1px solid #dde7e2;align-self:stretch;display:flex;align-items:center}"+
+      ".pc-biome dt{font-size:7pt;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#6a8f2f}"+
+      ".pc-biome dd{font-size:8.5pt;line-height:1.4;color:#33453d}"+
+      ".pc-lens{margin-top:13px;background:#fbfaf5;border:1px solid #e6e0cd;border-radius:7px;padding:8px 10px}"+
+      ".pc-lens h2{border:0;padding:0;margin:0 0 3px}"+
+      ".pc-lens .lb{display:inline-block;font-size:7pt;font-weight:800;letter-spacing:.07em;text-transform:uppercase;"+
+        "color:#fff;background:#BC8A2E;border-radius:3px;padding:1px 5px;margin-right:5px;vertical-align:1px}"+
+      ".pc-lens .ln{font-family:'Merriweather',Georgia,serif;font-size:10.5pt;font-weight:800;color:#1A3C34}"+
+      ".pc-lens h3{font-size:8pt;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#8a7333;margin:6px 0 1px}"+
+      ".pc-lens p{font-size:9pt;line-height:1.5}"+
+      ".pc-ai{margin-top:10px;font-size:8pt;line-height:1.45;color:#5b6b63;background:#f6f7f6;"+
+        "border-left:3px solid #c2cec8;border-radius:0 5px 5px 0;padding:5px 8px}"+
+      ".pc-ai b{color:#33453d}"+
+      ".pc-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}"+
+      "h2{font-family:'Merriweather',Georgia,serif;font-size:11pt;font-weight:800;color:#1A3C34;"+
+        "margin:0 0 5px;padding-bottom:3px;border-bottom:1px solid #dde7e2}"+
+      "h2:not(:first-child){margin-top:13px}"+
+      "ul{list-style:none}li{font-size:9pt;line-height:1.5}"+
+      ".pc-checks li{margin-bottom:2px;font-size:9pt}"+
+      ".pc-checks li.ok{color:#1A3C34;font-weight:600}.pc-checks li.no{color:#96a49d}"+
+      ".pc-expl{margin-top:15px;padding-top:9px;border-top:1px solid #dde7e2}"+
+      ".pc-expl h2{border:0;padding:0;margin-bottom:4px}"+
+      ".pc-expl p{font-size:9pt;line-height:1.5;margin-bottom:5.5px}"+
+      ".pc-expl p:first-of-type{font-weight:600;color:#1A3C34}"+
+      ".pc-foot{margin-top:14px;padding-top:6px;border-top:1px solid #dde7e2;font-size:7.5pt;color:#96a49d}";
+
+    /* ── export: render a print sheet into a hidden iframe, then let the
+       browser's own print dialog do "Save as PDF" (no libraries needed) ── */
+    function pesc(t){ return String(t==null?'':t).replace(/[&<>"]/g,function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+    function diagramSVG(){
+      var c=svg.cloneNode(true);
+      c.removeAttribute('class'); c.removeAttribute('style');
+      ['[data-empty]','[data-rubber]'].forEach(function(q){
+        var n=c.querySelector(q); if(n) n.remove(); });
+      // crop the viewBox to the drawing (+ breathing room) so the figure prints big
+      var x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
+      nodes.forEach(function(n){ x0=Math.min(x0,n.x-70); x1=Math.max(x1,n.x+70);
+                                 y0=Math.min(y0,n.y-62); y1=Math.max(y1,n.y+82); });
+      if(x1-x0<430){ var cx=(x0+x1)/2; x0=cx-215; x1=cx+215; }
+      if(y1-y0<280){ var cy=(y0+y1)/2; y0=cy-140; y1=cy+140; }
+      x0=Math.max(0,x0); y0=Math.max(0,y0); x1=Math.min(1000,x1); y1=Math.min(620,y1);
+      c.setAttribute('viewBox', x0.toFixed(0)+' '+y0.toFixed(0)+' '+(x1-x0).toFixed(0)+' '+(y1-y0).toFixed(0));
+      var st=document.createElementNS(NS,'style');
+      st.textContent=".bd-nlbl{font:700 12px 'Inter',Helvetica,Arial,sans-serif;fill:#33453d;"+
+        "paint-order:stroke;stroke:#fff;stroke-width:3.5px;stroke-linejoin:round}"+
+        ".bd-lsign{font:900 15px 'Inter',Helvetica,Arial,sans-serif;"+
+        "paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}";
+      c.insertBefore(st, c.firstChild);
+      return new XMLSerializer().serializeToString(c);
+    }
+
+    function exportPDF(){
+      var hint=wrap.querySelector('[data-runhint]');
+      if(!nodes.length){
+        hint.innerHTML='<strong>Nothing to save yet.</strong> Drag in at least one component first.';
+        return;
+      }
+      var title=(wrap.querySelector('[data-name]').value||'').trim() || 'Untitled system';
+      var who=(wrap.querySelector('[data-author]').value||'').trim();
+      var when=new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+
+      /* The sheet deliberately does NOT reprint the components, the connections,
+         the food chain, the loop list or the on-screen read-out. All of that is
+         already visible in the diagram directly above it, and spelling it out in
+         words made the page busy. Ryan's call, 2026-08-31. What prints is the
+         student's own work: the biome, the diagram, the two checklists, the
+         sustainability lens, the explanation and the AI credit. */
+      function checks(list){ return '<ul class="pc-checks">'+(list||[]).map(function(c){
+        return '<li class="'+(c.ok?'ok':'no')+'">'+(c.ok?'&#10003;':'&#9675;')+'&nbsp;&nbsp;'+pesc(c.t)+'</li>'; }).join('')+'</ul>'; }
+
+      // the written explanation, as paragraphs, at the foot of the sheet
+      function explSection(){
+        var t=(explEl.value||'').trim();
+        if(!t) return '';
+        return '<section class="pc-expl"><h2>Explanation</h2>'+
+          t.split(/\n\s*\n/).map(function(par){
+            return '<p>'+pesc(par).replace(/\n/g,'<br>')+'</p>'; }).join('')+'</section>';
+      }
+
+      // biome + ecological characteristics
+      var bName=biomeLabel();
+      var bio = (bName||fv(bVeg)||fv(bPre)||fv(bTmp))
+        ? '<div class="pc-biome"><div class="bn">'+pesc(bName||'Biome')+'</div>'+
+            '<div><dt>Dominant vegetation</dt><dd>'+pesc(fv(bVeg)||'—')+'</dd></div>'+
+            '<div><dt>Precipitation</dt><dd>'+pesc(fv(bPre)||'—')+'</dd></div>'+
+            '<div><dt>Temperature</dt><dd>'+pesc(fv(bTmp)||'—')+'</dd></div></div>'
+        : '';
+
+      // sustainability lens
+      function paras(t){ return String(t).split(/\n\s*\n/).map(function(p){
+        return '<p>'+pesc(p).replace(/\n/g,'<br>')+'</p>'; }).join(''); }
+      var lens = (fv(lName)||fv(lWhy)||fv(lHow))
+        ? '<section class="pc-lens"><h2>Sustainability lens</h2>'+
+            '<div><span class="lb">'+pesc(lKind?lKind.value:'Challenge')+'</span>'+
+              '<span class="ln">'+pesc(fv(lName)||'—')+'</span></div>'+
+            (fv(lWhy)? '<h3>Why it matters</h3>'+paras(fv(lWhy)) : '')+
+            (fv(lHow)? '<h3>Potential solutions</h3>'+paras(fv(lHow)) : '')+
+          '</section>'
+        : '';
+
+      // AI credit
+      var aiTxt = (noAi&&noAi.checked) ? 'No generative AI was used on this assignment.' : fv(aiEl);
+      var ai = aiTxt ? '<div class="pc-ai"><b>Generative AI:</b> '+pesc(aiTxt)+'</div>' : '';
+
+      var doc='<!DOCTYPE html><html><head><meta charset="utf-8"><title>'+pesc(title)+'</title>'+
+        '<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">'+
+        '<style>'+PRINT_CSS+'</style></head><body>'+
+        '<header class="pc-head">'+
+          '<div class="pc-kicker">SOS 110 &middot; Module 1 Group Assignment &middot; The Ecosystem Approach</div>'+
+          '<h1>'+pesc(title)+'</h1>'+
+          '<div class="pc-meta">'+(who?'<strong>'+pesc(who)+'</strong> &middot; ':'')+when+'</div>'+
+        '</header>'+
+        bio+
+        '<figure class="pc-fig">'+diagramSVG()+
+          '<figcaption><span class="k s"></span>Social <span class="k e"></span>Ecological '+
+          '<span class="k r"></span>Trophic <span class="k t"></span>Technical'+
+          ' &nbsp;&nbsp;|&nbsp;&nbsp; <b class="pos">&mdash;+&rarr;</b> amplifies &nbsp; '+
+          '<b class="neg">&mdash;&minus;&rarr;</b> dampens &nbsp; <b class="eng">&mdash;&#9889;&rarr;</b> energy flows to'+
+          '</figcaption></figure>'+
+        '<section class="pc-cols">'+
+          '<div><h2>Does it behave like a system?</h2>'+checks(report.sys)+'</div>'+
+          '<div><h2>Assignment checklist</h2>'+checks(report.asg)+'</div>'+
+        '</section>'+
+        lens+
+        explSection()+
+        ai+
+        '<footer class="pc-foot">Built in the Module 1 SET Builder &mdash; SOS 110, Module 1 Group Assignment. '+
+          'Every student submits their own copy on Canvas.</footer>'+
+        '</body></html>';
+
+      var f=document.createElement('iframe');
+      f.setAttribute('aria-hidden','true');
+      f.style.cssText='position:fixed;right:0;bottom:0;width:1px;height:1px;opacity:0;border:0;';
+      document.body.appendChild(f);
+      var d=f.contentDocument||f.contentWindow.document;
+      d.open(); d.write(doc); d.close();
+      hint.innerHTML='Opening your print dialog &mdash; choose <strong>&ldquo;Save as PDF&rdquo;</strong> as the destination.';
+      var go=function(){
+        try{ f.contentWindow.focus(); f.contentWindow.print(); }catch(err){}
+        setTimeout(function(){ f.remove(); }, 2000);
+      };
+      // give webfonts + the SVG filter a moment to settle before printing
+      if(d.fonts && d.fonts.ready){ d.fonts.ready.then(function(){ setTimeout(go,180); }); }
+      else setTimeout(go, 700);
+    }
+    wrap.querySelector('[data-pdf]').addEventListener('click', exportPDF);
+
+    svg.addEventListener('pointerdown',function(){ if(mode==='move'){ select(null); nodes.forEach(function(m){m.g.classList.remove('sel');}); } });
+    analyse();
+  })();</script>
+</section>
+</div>
+</body>
+</html>
