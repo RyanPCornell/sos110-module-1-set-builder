@@ -465,25 +465,44 @@ img.bleed{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
 .bd-renamehint{font-size:.58rem; font-weight:600; color:#6b7d75; background:#fff;
   border-radius:4px; padding:.02rem .3rem; box-shadow:0 2px 6px rgba(20,40,30,.1);}
 
-/* the quiet ⓘ Info button + its panel */
+/* the quiet ⓘ Info button, and its panel — set as a reference sheet rather than
+   a step-by-step: serif prose, hairline section rules, a real key for the arrows,
+   and UI button names in the sans face instead of glyphs scattered through text */
 .bd-info{font:inherit; font-weight:700; font-size:.74rem; cursor:pointer; color:#8c9a93;
-  background:none; border:none; padding:.35rem .3rem; border-radius:8px; letter-spacing:.01em;}
+  background:none; border:none; padding:.35rem .3rem; border-radius:8px;}
 .bd-info:hover{color:var(--forest-mid); text-decoration:underline; text-underline-offset:.18em;}
-.bd-info-card{width:min(46rem,100%);}
-.bd-info-list{margin:0; padding-left:1.35rem; display:flex; flex-direction:column; gap:.52rem;}
-.bd-info-list li{font-size:clamp(.78rem,1.18vw,.9rem); line-height:1.55; color:#33453d;}
-.bd-info-list li::marker{font-weight:900; color:var(--forest-mid);}
-.bd-info-list b{font-weight:800; color:var(--forest);}
-.bd-info-list i{font-style:italic;}
-.bd-info-sub{list-style:none; margin:.28rem 0 .3rem; padding-left:0;
-  display:flex; flex-direction:column; gap:.16rem;}
-.bd-info-sub li{font-size:.96em; padding-left:.85rem; position:relative;}
-.bd-info-sub li::before{content:""; position:absolute; left:0; top:.62em;
-  width:4px; height:4px; border-radius:50%; background:#c2cec8;}
-.bd-info-sub b.pos{color:#2f7d4f;} .bd-info-sub b.neg{color:#A4373A;} .bd-info-sub b.eng{color:#6a8f2f;}
-.bd-info-foot{margin-top:.75rem; padding-top:.6rem; border-top:1px solid var(--line);
-  font-size:clamp(.74rem,1.12vw,.85rem); line-height:1.5; color:#5b6b63; font-style:italic;}
-.bd-info-foot b{font-style:normal; font-weight:800; color:var(--forest);}
+.bd-info-card{width:min(52rem,100%);}
+[data-infomodal]{padding-block:clamp(.6rem,2.2vh,1.3rem);}  /* fit the whole sheet at 810px */
+
+.bd-i-lead{font-family:'Merriweather',serif; font-size:clamp(.79rem,1.19vw,.92rem);
+  line-height:1.55; color:#2b3a34;}
+.bd-i-p{font-family:'Merriweather',serif; font-size:clamp(.75rem,1.12vw,.86rem);
+  line-height:1.55; color:#2f3f38; margin-top:.4rem;}
+.bd-i-p i{font-style:italic; color:var(--forest);}
+.bd-i-muted{color:#6b7d75;}
+.bd-i-muted i{color:#5b6b63;}
+
+/* "THE THREE ARROWS ─────────" section divider */
+.bd-i-rule{display:flex; align-items:center; gap:.7rem; margin:.72rem 0 .38rem;}
+.bd-i-rule span{flex:none; font-size:.6rem; font-weight:800; letter-spacing:.17em;
+  text-transform:uppercase; color:#8a9a92;}
+.bd-i-rule::after{content:""; flex:1; height:1px; background:var(--line);}
+
+.bd-i-key{width:100%; border-collapse:collapse;}
+.bd-i-key th,.bd-i-key td{text-align:left; vertical-align:baseline;
+  padding:.26rem .5rem .26rem 0; border-bottom:1px solid var(--line);}
+.bd-i-key tr:last-child th,.bd-i-key tr:last-child td{border-bottom:0;}
+.bd-i-key th{white-space:nowrap; width:1%; padding-right:1.1rem;
+  font-family:'Inter',sans-serif; font-weight:700;
+  font-size:clamp(.72rem,1.08vw,.84rem); color:#4a6055;}
+.bd-i-key th b{font-weight:900; font-size:1.05em;}
+.bd-i-key th b.pos{color:#2f7d4f;} .bd-i-key th b.neg{color:#A4373A;} .bd-i-key th b.eng{color:#6a8f2f;}
+.bd-i-key td{font-family:'Merriweather',serif; font-size:clamp(.73rem,1.1vw,.84rem);
+  line-height:1.5; color:#2f3f38;}
+
+/* a control's on-screen name, in the UI's own face so it reads as a label */
+.bd-ui{font-family:'Inter',sans-serif; font-weight:700; font-size:.94em; color:var(--forest);}
+.bd-i b.pos{color:#2f7d4f; font-weight:900;} .bd-i b.neg{color:#A4373A; font-weight:900;}
 
 
 /* ── standalone-only: no deck chrome, so reclaim the side padding ── */
@@ -671,53 +690,54 @@ img.bleed{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
         </div>
       </div>
     </div>
-    <!-- ── how this works ── -->
+    <!-- ── how this works: a reference panel, not a walkthrough ── -->
     <div class="bd-modal" data-infomodal hidden>
       <div class="bd-modal-card bd-info-card" role="dialog" aria-modal="true" aria-label="How this tool works">
         <div class="bd-modal-head">
           <h3>How this works</h3>
           <button class="bd-modal-x" type="button" data-info-close aria-label="Close">&times;</button>
         </div>
-        <p class="bd-modal-hint">You are building the one-page diagram the assignment asks for,
-          and saving it as a PDF to hand in on Canvas.</p>
-        <div class="bd-modal-body">
-          <ol class="bd-info-list">
-            <li><b>Pick your biome.</b> Choosing one fills in starting values for dominant
-              vegetation, precipitation and temperature. Edit them freely &mdash; you should be
-              able to explain whatever you leave there.</li>
-            <li><b>Add the pieces.</b> Drag one in from the palette, or just click it. Every group
-              ends in a dashed <b>Custom&hellip;</b> piece for anything the palette does not have,
-              and you can <b>double-click any piece to rename it</b> &mdash; a desert's
-              <i>Producers</i> might read <i>saguaro &amp; creosote</i>.</li>
-            <li><b>Draw the arrows.</b> Switch to <b>&#10145; Connect</b> and drag from one piece
-              to another. There are three kinds:
-              <ul class="bd-info-sub">
-                <li><b class="pos">+ amplifies</b> &mdash; more of this, more of that.</li>
-                <li><b class="neg">&minus; dampens</b> &mdash; more of this, less of that.</li>
-                <li><b class="eng">&#9889; energy flows to</b> &mdash; the food chain: who eats
-                  whom. Use these to run producers up to your apex predators.</li>
-              </ul>
-              Click an arrow you have already drawn to cycle it through the three;
-              <b>&#9986; Remove</b> deletes pieces and arrows.</li>
-            <li><b>Watch the panel on the right.</b> It counts your three systems, finds the
-              feedback loops, and ticks off the assignment checklist as you work. Energy arrows
-              are left out of the loop count on purpose &mdash; a food chain is a chain, not a
-              feedback loop.</li>
-            <li><b>&#9889; Shock the system.</b> Click a piece, then shock it, to see whether a
-              small change runs away, keeps circulating, or fades out.</li>
-            <li><b>&#9998; Write-up.</b> Your sustainability lens (one challenge or opportunity,
-              why it matters, what you would do), your explanation of the diagram, and a note
-              crediting which specific parts were AI-assisted.</li>
-            <li><b>&#10515; Save as PDF</b> and submit that file. This is a collaborative effort,
-              but every student hands in their own copy.</li>
-          </ol>
-          <p class="bd-info-foot">Not sure where to start? Load the worked example
-            <b>Coral reef &amp; fishing town</b> &mdash; a full food chain wired into a fishing
-            town, with two feedback loops pulling against each other.</p>
+        <div class="bd-modal-body bd-i">
+          <p class="bd-i-lead">This tool builds the one-page diagram the assignment asks for:
+            choose a biome, describe its climate and what grows there, map the pieces of its system
+            and how they act on one another, then save the result as a PDF to hand in.</p>
+
+          <div class="bd-i-rule"><span>The three arrows</span></div>
+          <table class="bd-i-key">
+            <tr><th><b class="pos">+</b>&ensp;amplifies</th>
+                <td>More of the first, more of the second.</td></tr>
+            <tr><th><b class="neg">&minus;</b>&ensp;dampens</th>
+                <td>More of the first, less of the second.</td></tr>
+            <tr><th><b class="eng">&#9889;</b>&ensp;energy flows to</th>
+                <td>The food chain &mdash; who eats whom. Run these from your producers up to
+                    your apex predators.</td></tr>
+          </table>
+          <p class="bd-i-p">Switch to <span class="bd-ui">Connect</span> and drag from one piece
+            to another to draw one. Clicking an arrow already on the canvas cycles it through the
+            three; <span class="bd-ui">Remove</span> deletes pieces and arrows alike.</p>
+
+          <div class="bd-i-rule"><span>Two things worth knowing</span></div>
+          <p class="bd-i-p"><i>Rename anything.</i> Double-click a piece to retitle it &mdash; a
+            desert's <i>Producers</i> might read <i>saguaro &amp; creosote</i>. Each palette group
+            also ends in a blank <i>Custom</i> piece for whatever the palette lacks. Renaming
+            changes the label only, so the checks go on working.</p>
+          <p class="bd-i-p"><i>A food chain is not a feedback loop.</i> Energy arrows are deliberately
+            left out of the loop count: energy up a chain is a sequence, not a circuit. The loops
+            the panel reports come from the <b class="pos">+</b> and <b class="neg">&minus;</b>
+            arrows, which is where a system's behaviour lives.</p>
+
+          <div class="bd-i-rule"><span>Finishing</span></div>
+          <p class="bd-i-p">The panel on the right names the feedback loops it finds and ticks
+            off the assignment checklist as you work. When the checklist is full, write your
+            sustainability lens and explanation under <span class="bd-ui">Write-up</span>, then
+            <span class="bd-ui">Save as PDF</span>. Every student submits their own copy.</p>
+          <p class="bd-i-p bd-i-muted">The worked examples are there to be taken apart:
+            <i>Coral reef &amp; fishing town</i> is a full food chain wired into a fishing town,
+            with two loops pulling against each other.</p>
         </div>
         <div class="bd-modal-foot">
-          <span class="bd-modal-note">Nothing here is uploaded or stored &mdash; your work lives in this browser tab until you save the PDF.</span>
-          <button class="bd-btn pdf" type="button" data-info-close>Got it</button>
+          <span class="bd-modal-note">Nothing is uploaded or stored &mdash; your work lives in this browser tab until you save the PDF.</span>
+          <button class="bd-btn pdf" type="button" data-info-close>Close</button>
         </div>
       </div>
     </div>
