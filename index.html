@@ -999,7 +999,9 @@ img.bleed{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
       links.forEach(function(l){
         var dx=l.b.x-l.a.x, dy=l.b.y-l.a.y, d=Math.hypot(dx,dy)||1, ux=dx/d, uy=dy/d;
         var back=links.some(function(k){return k.a===l.b&&k.b===l.a;});
-        var bow=back?26:12;
+        /* Arc long arrows more: a flat 12px bow made a cross-canvas link run straight
+           through whatever happened to sit between its two ends. */
+        var bow = back ? 26+Math.min(18,d*0.022) : Math.min(34,11+d*0.045);
         var x1=l.a.x+ux*36, y1=l.a.y+uy*36, x2=l.b.x-ux*40, y2=l.b.y-uy*40;
         var mx=(x1+x2)/2 - uy*bow, my=(y1+y2)/2 + ux*bow;
         var col=linkColor(l.p);
@@ -1098,69 +1100,76 @@ img.bleed{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
     var PRESETS={
       /* ── STARTER: a reef and the town fishing it ──
          Reinforcing: fewer sharks → higher price → bigger fleet → fewer sharks.
-         Balancing:   more sharks → higher survey → higher quota → bigger fleet → fewer sharks. */
+         Balancing:   more sharks → higher survey → higher quota → bigger fleet → fewer sharks.
+         Balancing:   more parrotfish feed more predators, which eat more parrotfish. */
       reef:{name:'Coral reef & fishing town', biome:'marine',
         veg:'Zooxanthellae inside the corals, plus turf algae and seagrass beds',
         pre:'Rainfall matters mostly as runoff — it carries sediment and nutrients onto the reef',
         tmp:'Warm and narrow, 24–29 °C; corals bleach a degree or two above the summer maximum',
-        n:[['prod',140,120,'Algae & seagrass'],
-           ['herb',140,300,'Parrotfish & urchins'],
-           ['carn',140,480,'Snapper & jacks'],
-           ['apex',360,500,'Reef sharks & grouper'],
-           ['decomp',360,110,'Bacteria & detritivores'],
-           ['climate',600,95,'Ocean temperature'],
-           ['pipe',380,300,'Wastewater treatment'],
-           ['work',690,300,'Fishing fleet'],
-           ['market',890,150,'Fish price'],
-           ['data',890,430,'Stock survey'],
-           ['gov',660,500,'Catch quota']],
+        n:[['prod',105,105,'Algae & seagrass'],
+           ['herb',95,315,'Parrotfish & urchins'],
+           ['carn',140,520,'Snapper & jacks'],
+           ['apex',375,520,'Reef sharks & grouper'],
+           ['decomp',330,95,'Bacteria & detritivores'],
+           ['climate',555,95,'Ocean temperature'],
+           ['pipe',330,300,'Wastewater treatment'],
+           ['work',700,330,'Fishing fleet'],
+           ['market',905,155,'Fish price'],
+           ['data',905,420,'Stock survey'],
+           ['gov',660,530,'Catch quota']],
         l:[[0,1,2],[1,2,2],[2,3,2],[3,4,2],
-           [5,0,-1],[6,0,1],
+           [5,0,-1],[5,1,-1],[6,0,1],
+           [1,3,1],[3,1,-1],[2,1,-1],
            [7,3,-1],[3,8,-1],[8,7,1],
            [3,9,1],[9,10,1],[10,7,1]]},
 
       /* ── STARTER: Pacific Northwest forest, fire and logging ──
          Reinforcing: fewer conifers → higher timber price → more logging → fewer conifers.
-         Balancing 1: more conifers → more dry fuel → fire → fewer conifers.
-         Balancing 2: more dry fuel → more thinning policy → less dry fuel. */
+         Balancing:   more conifers → more dry fuel → fire → fewer conifers.
+         Balancing:   more dry fuel → more thinning policy → less dry fuel.
+         Balancing:   more elk feed more wolves, which take more elk. */
       pnw:{name:'Pacific Northwest forest', biome:'tempforest',
         veg:'Douglas-fir, western hemlock and redcedar over sword fern and moss — a dense evergreen canopy',
         pre:'150–250 cm a year, nearly all of it in a wet winter; summers run dry',
         tmp:'Mild and narrow, roughly 0–27 °C, though recent heat domes have pushed far past that',
-        n:[['prod',140,130,'Conifers & understory'],
-           ['herb',140,310,'Elk & deer'],
-           ['carn',140,480,'Goshawks & coyotes'],
-           ['apex',340,500,'Wolves & cougars'],
-           ['climate',390,110,'Summer heat & drought'],
-           ['forest',450,300,'Dry fuel load'],
-           ['factory',700,430,'Logging & mills'],
-           ['market',760,190,'Timber price'],
-           ['gov',890,330,'Thinning & harvest rules']],
+        n:[['prod',105,105,'Conifers & understory'],
+           ['herb',95,315,'Elk & deer'],
+           ['carn',140,520,'Goshawks & coyotes'],
+           ['apex',375,520,'Wolves & cougars'],
+           ['climate',345,95,'Summer heat & drought'],
+           ['forest',545,300,'Dry fuel load'],
+           ['factory',720,500,'Logging & mills'],
+           ['market',760,120,'Timber price'],
+           ['gov',925,320,'Thinning & harvest rules']],
         l:[[0,1,2],[1,2,2],[2,3,2],
-           [4,5,1],[0,5,1],[5,0,-1],
+           [4,5,1],[4,0,-1],[4,1,-1],
+           [0,5,1],[5,0,-1],
+           [1,3,1],[3,1,-1],[2,1,-1],
            [6,0,-1],[0,7,-1],[7,6,1],
            [5,8,1],[8,5,-1],[8,6,-1]]},
 
       /* ── STARTER: the Sonoran Desert at the edge of Phoenix ──
-         Reinforcing 1: subdivisions ↔ freeways.
-         Reinforcing 2: heat island ↔ air-conditioning load.
-         Balancing 1:  building draws down groundwater, which limits building.
-         Balancing 2:  building makes it hotter, and heat deters building. */
+         Reinforcing: subdivisions ↔ freeways, and heat island ↔ air-conditioning.
+         Balancing:   building draws down groundwater, which limits building.
+         Balancing:   building makes it hotter, and heat deters building.
+         Balancing:   more prey feed more coyotes, which take more prey. */
       sonoran:{name:'Phoenix sprawl & the Sonoran Desert', biome:'desert',
         veg:'Saguaro, palo verde, creosote and bursage, widely spaced with bare ground between',
         pre:'About 20 cm a year, split between gentle winter rain and summer monsoon storms',
         tmp:'Summer highs above 43 °C, mild winters, and a large day-to-night swing',
-        n:[['prod',140,130,'Saguaro & creosote'],
-           ['herb',140,310,'Jackrabbits & packrats'],
-           ['carn',140,485,'Rattlesnakes & hawks'],
-           ['apex',345,505,'Coyotes & bobcats'],
-           ['house',480,300,'New subdivisions'],
-           ['road',500,500,'Freeways & arterials'],
-           ['water',420,110,'Groundwater in storage'],
-           ['climate',740,190,'Urban heat island'],
-           ['grid',890,400,'Air-conditioning load']],
+        n:[['prod',105,105,'Saguaro & creosote'],
+           ['herb',95,315,'Jackrabbits & packrats'],
+           ['carn',140,520,'Rattlesnakes & hawks'],
+           ['apex',375,520,'Coyotes & bobcats'],
+           ['house',520,305,'New subdivisions'],
+           ['road',600,520,'Freeways & arterials'],
+           ['water',350,95,'Groundwater in storage'],
+           ['climate',790,155,'Urban heat island'],
+           ['grid',925,380,'Air-conditioning load']],
         l:[[0,1,2],[1,2,2],[2,3,2],
-           [4,0,-1],[4,5,1],[5,4,1],[5,3,-1],
+           [6,0,1],[4,0,-1],[7,1,-1],
+           [1,3,1],[3,1,-1],[2,1,-1],
+           [4,5,1],[5,4,1],
            [4,6,-1],[6,4,1],
            [4,7,1],[7,4,-1],[5,7,1],
            [7,8,1],[8,7,1]]},
