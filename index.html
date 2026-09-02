@@ -555,12 +555,16 @@ img.bleed{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
           <button class="bd-polbtn" type="button" data-pol="2" title="Energy flows from one trophic level to the next">⚡ energy to</button>
         </div>
         <select class="bd-preset" data-preset aria-label="Load an example">
-          <option value="">Load a worked example…</option>
-          <option value="reef">Coral reef &amp; fishing town</option>
-          <option value="pnw">Pacific Northwest forest</option>
-          <option value="sonoran">Phoenix sprawl &amp; the Sonoran Desert</option>
-          <option value="fishery">Managed fishery</option>
-          <option value="fashion">Fast fashion</option>
+          <option value="">Load an example…</option>
+          <optgroup label="Starter diagrams — a biome to build on">
+            <option value="reef">Coral reef &amp; fishing town</option>
+            <option value="pnw">Pacific Northwest forest</option>
+            <option value="sonoran">Phoenix sprawl &amp; the Sonoran Desert</option>
+          </optgroup>
+          <optgroup label="Feedback-loop demos — not biomes, no food chain">
+            <option value="fishery">Managed fishery</option>
+            <option value="fashion">Fast fashion</option>
+          </optgroup>
         </select>
         <button class="bd-info" type="button" data-infobtn title="How this tool works">&#9432; Info</button>
         <button class="bd-btn ghost" type="button" data-clear>Clear</button>
@@ -735,10 +739,12 @@ img.bleed{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
             off the assignment checklist as you work. When the checklist is full, write your
             sustainability lens and explanation under <span class="bd-ui">Write-up</span>, then
             <span class="bd-ui">Save as PDF</span>. Every student submits their own copy.</p>
-          <p class="bd-i-p bd-i-muted">The worked examples are there to be taken apart. Each
-            one wires a food chain into the system pulling on it &mdash; a reef into a fishing
-            town, a Pacific Northwest forest into fire and logging, the Sonoran Desert into the
-            edge of Phoenix.</p>
+          <p class="bd-i-p bd-i-muted">The <i>starter diagrams</i> give you a biome, a food
+            chain and a system already wired together &mdash; a reef and the town fishing it, a
+            Pacific Northwest forest under fire and logging, the Sonoran Desert at the edge of
+            Phoenix. They stop where your own thinking begins: the lens, the explanation and the
+            AI note are yours. The two <i>loop demos</i> are not biomes; they are there to show
+            what reinforcing and balancing feedback look like.</p>
         </div>
         <div class="bd-modal-foot">
           <span class="bd-modal-note">Nothing is uploaded or stored &mdash; your work lives in this browser tab until you save the PDF.</span>
@@ -1073,80 +1079,105 @@ img.bleed{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
       clearWriteup(); analyse();
     });
 
-    /* ── presets ── */
-    var PRESETS={
-      /* Temperate rainforest under a drying climate, with logging and fire.
-         Two runaway loops (roads beget logging beget roads; fuel builds) against
-         two brakes (fire thins the forest; smoke over towns drives policy). */
-      pnw:{name:'Pacific Northwest forest', biome:'tempforest',
-        veg:'Douglas-fir, western hemlock and redcedar over sword fern and moss \u2014 a dense evergreen canopy',
-        pre:'150\u2013250 cm a year, nearly all of it in a wet winter; summers run dry',
-        tmp:'Mild and narrow, roughly 0\u201327 \u00b0C, though recent heat domes have pushed far past that',
-        n:[['prod',120,95,'Conifers & understory'],
-           ['herb',120,250,'Elk & deer'],
-           ['carn',120,405,'Goshawks & coyotes'],
-           ['apex',305,500,'Wolves & cougars'],
-           ['decomp',305,95,'Fungi & deadwood'],
-           ['climate',525,80,'Warmer, drier summers'],
-           ['forest',500,260,'Dry fuel load'],
-           ['air',715,130,'Wildfire smoke'],
-           ['factory',660,400,'Logging & mills'],
-           ['road',470,445,'Logging roads'],
-           ['market',900,330,'Timber demand'],
-           ['gov',645,530,'Forest policy & thinning'],
-           ['house',900,140,'Nearby towns']],
-        l:[[0,1,2],[1,2,2],[2,3,2],[3,4,2],[4,0,2],
-           [5,6,1],[0,6,1],[6,0,-1],[6,7,1],
-           [7,12,-1],[12,11,-1],[11,6,-1],[11,8,-1],
-           [10,8,1],[8,10,-1],[8,0,-1],[8,9,1],[9,8,1]]},
+    /* ── presets ──
+       Two kinds, and the dropdown says which is which:
+         STARTER DIAGRAMS (reef, pnw, sonoran) set a biome, its characteristics, a
+           food chain and a system. They deliberately leave the write-up empty —
+           the sustainability lens, the explanation and the AI note are the
+           student's work, so these are a place to start, not a finished answer.
+         FEEDBACK-LOOP DEMOS (fishery, fashion) are not biomes and have no food
+           chain. They exist to show what reinforcing and balancing loops look
+           like, and they intentionally fail the assignment checklist.
 
-      /* Sonoran desert at the edge of Phoenix. Sprawl and roads reinforce each
-         other, heat and air-conditioning reinforce each other, and the two things
-         that push back are groundwater and the heat itself. */
+       Energy arrows run ONE WAY. There is no decomposers→producers energy link in
+       any preset: energy entering the decomposers leaves the system as heat. It is
+       NUTRIENTS that cycle back, and this tool has no arrow for that.
+
+       Every node here is named as something that can be more or less, so the sign
+       on each arrow can be audited: "Timber price", not "Markets". */
+    var PRESETS={
+      /* ── STARTER: a reef and the town fishing it ──
+         Reinforcing: fewer sharks → higher price → bigger fleet → fewer sharks.
+         Balancing:   more sharks → higher survey → higher quota → bigger fleet → fewer sharks. */
+      reef:{name:'Coral reef & fishing town', biome:'marine',
+        veg:'Zooxanthellae inside the corals, plus turf algae and seagrass beds',
+        pre:'Rainfall matters mostly as runoff — it carries sediment and nutrients onto the reef',
+        tmp:'Warm and narrow, 24–29 °C; corals bleach a degree or two above the summer maximum',
+        n:[['prod',140,120,'Algae & seagrass'],
+           ['herb',140,300,'Parrotfish & urchins'],
+           ['carn',140,480,'Snapper & jacks'],
+           ['apex',360,500,'Reef sharks & grouper'],
+           ['decomp',360,110,'Bacteria & detritivores'],
+           ['climate',600,95,'Ocean temperature'],
+           ['pipe',380,300,'Wastewater treatment'],
+           ['work',690,300,'Fishing fleet'],
+           ['market',890,150,'Fish price'],
+           ['data',890,430,'Stock survey'],
+           ['gov',660,500,'Catch quota']],
+        l:[[0,1,2],[1,2,2],[2,3,2],[3,4,2],
+           [5,0,-1],[6,0,1],
+           [7,3,-1],[3,8,-1],[8,7,1],
+           [3,9,1],[9,10,1],[10,7,1]]},
+
+      /* ── STARTER: Pacific Northwest forest, fire and logging ──
+         Reinforcing: fewer conifers → higher timber price → more logging → fewer conifers.
+         Balancing 1: more conifers → more dry fuel → fire → fewer conifers.
+         Balancing 2: more dry fuel → more thinning policy → less dry fuel. */
+      pnw:{name:'Pacific Northwest forest', biome:'tempforest',
+        veg:'Douglas-fir, western hemlock and redcedar over sword fern and moss — a dense evergreen canopy',
+        pre:'150–250 cm a year, nearly all of it in a wet winter; summers run dry',
+        tmp:'Mild and narrow, roughly 0–27 °C, though recent heat domes have pushed far past that',
+        n:[['prod',140,130,'Conifers & understory'],
+           ['herb',140,310,'Elk & deer'],
+           ['carn',140,480,'Goshawks & coyotes'],
+           ['apex',340,500,'Wolves & cougars'],
+           ['climate',390,110,'Summer heat & drought'],
+           ['forest',450,300,'Dry fuel load'],
+           ['factory',700,430,'Logging & mills'],
+           ['market',760,190,'Timber price'],
+           ['gov',890,330,'Thinning & harvest rules']],
+        l:[[0,1,2],[1,2,2],[2,3,2],
+           [4,5,1],[0,5,1],[5,0,-1],
+           [6,0,-1],[0,7,-1],[7,6,1],
+           [5,8,1],[8,5,-1],[8,6,-1]]},
+
+      /* ── STARTER: the Sonoran Desert at the edge of Phoenix ──
+         Reinforcing 1: subdivisions ↔ freeways.
+         Reinforcing 2: heat island ↔ air-conditioning load.
+         Balancing 1:  building draws down groundwater, which limits building.
+         Balancing 2:  building makes it hotter, and heat deters building. */
       sonoran:{name:'Phoenix sprawl & the Sonoran Desert', biome:'desert',
         veg:'Saguaro, palo verde, creosote and bursage, widely spaced with bare ground between',
         pre:'About 20 cm a year, split between gentle winter rain and summer monsoon storms',
-        tmp:'Summer highs above 43 \u00b0C, mild winters, and a large day-to-night swing',
-        n:[['prod',120,95,'Saguaro & creosote'],
-           ['herb',120,250,'Jackrabbits & packrats'],
-           ['carn',120,405,'Rattlesnakes & hawks'],
-           ['apex',300,505,'Coyotes & bobcats'],
-           ['decomp',300,95,'Soil microbes & termites'],
-           ['water',490,165,'Groundwater & canal water'],
-           ['climate',700,95,'Urban heat island'],
-           ['house',490,350,'New subdivisions'],
-           ['road',480,520,'Freeways & arterials'],
-           ['pipe',680,250,'Water & sewer mains'],
-           ['grid',890,175,'Power grid & A/C load'],
-           ['market',690,430,'Housing demand'],
-           ['gov',890,400,'Zoning & water policy']],
-        l:[[0,1,2],[1,2,2],[2,3,2],[3,4,2],[4,0,2],
-           [11,7,1],[7,0,-1],[7,8,1],[8,7,1],[8,3,-1],
-           [7,9,1],[9,5,-1],[5,12,-1],[12,7,-1],
-           [7,6,1],[6,10,1],[10,6,1],[6,11,-1]]},
+        tmp:'Summer highs above 43 °C, mild winters, and a large day-to-night swing',
+        n:[['prod',140,130,'Saguaro & creosote'],
+           ['herb',140,310,'Jackrabbits & packrats'],
+           ['carn',140,485,'Rattlesnakes & hawks'],
+           ['apex',345,505,'Coyotes & bobcats'],
+           ['house',480,300,'New subdivisions'],
+           ['road',500,500,'Freeways & arterials'],
+           ['water',420,110,'Groundwater in storage'],
+           ['climate',740,190,'Urban heat island'],
+           ['grid',890,400,'Air-conditioning load']],
+        l:[[0,1,2],[1,2,2],[2,3,2],
+           [4,0,-1],[4,5,1],[5,4,1],[5,3,-1],
+           [4,6,-1],[6,4,1],
+           [4,7,1],[7,4,-1],[5,7,1],
+           [7,8,1],[8,7,1]]},
 
-      reef:{name:'Coral reef & fishing town', biome:'marine',
-        veg:'Zooxanthellae inside the corals, plus turf algae and seagrass beds',
-        pre:'Rainfall matters mostly as runoff \u2014 it carries sediment and nutrients onto the reef',
-        tmp:'Warm and narrow, 24\u201329 \u00b0C; corals bleach a degree or two above the summer maximum',
-        n:[['prod',140,110],['herb',140,280],['carn',140,450],['apex',350,480],
-           ['decomp',350,105],['climate',560,90],['pipe',380,290],
-           ['work',700,290],['market',890,140],['gov',690,490],['data',900,410]],
-        /* 0-4 food chain (⚡), then the causal system:
-           two loops pull on the same fleet — a REINFORCING price spiral
-           (apex→market− , market→fleet+ , fleet→apex−) and a BALANCING
-           survey-and-quota loop (apex→data+ , data→quota+ , quota→fleet+ ,
-           fleet→apex−). Climate and coastal treatment push in from outside. */
-        l:[[0,1,2],[1,2,2],[2,3,2],[3,4,2],[4,0,2],
-           [5,0,-1],[6,0,1],[9,6,1],
-           [7,3,-1],[3,8,-1],[8,7,1],
-           [3,10,1],[10,9,1],[9,7,1]]},
-      fashion:{name:'Fast fashion', expl:'Fast fashion — why this system is drawn the way it is.\n\nThis traces a cheap t-shirt from the moment somebody wants one to the river it eventually turns up in.\n\nHouseholds wanting more clothes push demand into the market (+), the market pushes orders to the factories (+), the factories hire (+), and wages send people back to the shops (+). Four amplifying links and not one dampening link, so this loop is reinforcing. Nothing inside it says stop. It is the engine of the whole system, and it is why the volume of clothing produced keeps climbing.\n\nThe second loop is the one meant to hold the first in check. Production degrades the freshwater downstream \u2014 dye, finishing, untreated effluent \u2014 so that link dampens (\u2212). Then comes the arrow whose sign is most often reversed. The node is Freshwater, the clean stock, not the pollution. Cleaner water means less reason to regulate; dirtier water means more. So freshwater to government dampens as well (\u2212). Regulation then dampens factory output (\u2212).\n\nThree dampening links, an odd number, so the regulatory loop is balancing: it genuinely pushes back. The lesson is not that it fails, but how easily it is outrun. The reinforcing loop turns on consumer demand and can double in a decade. The balancing loop waits on somebody measuring the river, publishing it, writing a rule, and enforcing it across a supply chain on the other side of the world. Two loops, opposite signs, wildly different speeds \u2014 and the fast one is winning.\n\nThis is a socio-ecological-technical system because the t-shirt is at once a social object, an industrial process and a discharge into a river, and no one of those three explains it alone.',
-        n:[['house',180,150],['market',430,120],['factory',700,180],['water',760,430],['work',430,470],['gov',170,400]],
+      /* ── DEMO: not a biome. Two loops of opposite sign, wildly different speeds. ── */
+      fashion:{name:'Fast fashion (loop demo)',
+        n:[['house',180,150,'Demand for clothes'],['market',430,120,'Orders placed'],
+           ['factory',700,180,'Mill output'],['water',760,430,'Clean river water'],
+           ['work',430,470,'Wages paid'],['gov',170,400,'Strength of regulation']],
         l:[[0,1,1],[1,2,1],[2,3,-1],[2,4,1],[3,5,-1],[5,2,-1],[4,0,1]]},
-      fishery:{name:'Managed fishery', expl:'A fishery that holds — why this system is drawn the way it is.\n\nThis is the same commons problem as every fishery that ever collapsed, drawn with the one thing the collapsed ones were missing: a rule that listens.\n\nStart with the stock. More fish in the water means a higher reading on the annual survey (+), and a higher reading means the quota is set higher (+). A bigger quota puts more boats to sea (+), and more fishing takes fish out of the water (\u2212). Follow those four arrows around and you pass through exactly one dampening link. One negative makes this loop balancing: it self-corrects. A good year loosens the quota until the extra fishing pulls the stock back down; a thin year tightens it until the stock recovers. None of that is automatic \u2014 it works only because the quota is tied to the survey rather than to last year\u2019s catch.\n\nThe price loop is faster. A big landing floods the market and the price drops (\u2212), and a lower price sends fewer boats out (+). One dampening link, so this loop is balancing too, and it acts within a season rather than within a year.\n\nThe survey does one more job: it tells the fleet where the fish are not (+). That closes a third loop \u2014 better information, more effective fishing, fewer fish, a lower reading \u2014 with a single dampening link in it. Balancing again, and worth pausing on: here better technology does not run away with the resource, because it sits inside a loop that pushes back.\n\nThe community loop is the slow one. A stock that keeps producing keeps people invested in the fishery (+), and a community with a stake in it defends the rules instead of lobbying against them (+). That feeds the quota, which feeds the fleet, which feeds back on the stock (\u2212). One negative: balancing. This is the loop Elinor Ostrom spent a career documenting, and it is the first one to fail when a fishery is governed from far away.\n\nClimate sits outside all four loops. Warming water pushes on the stock (\u2212) and nothing in the fishery pushes back on the climate. It is a driver, not a participant \u2014 and it is why a system made entirely of balancing loops can still be walked slowly downhill.\n\nThat is the contrast with the other three examples. Every loop here settles, so a shock is absorbed instead of amplified. That is what people mean by a resilient system: not that nothing disturbs it, but that what disturbs it does not run away.',
-        n:[['wild',185,330],['data',400,130],['gov',690,160],['work',720,360],
-           ['market',540,465],['equity',275,465],['climate',160,140]],
+
+      /* ── DEMO: not a biome. Four balancing loops, so shocks settle. ── */
+      fishery:{name:'Managed fishery (loop demo)',
+        n:[['wild',185,330,'Fish stock'],['data',400,130,'Survey reading'],
+           ['gov',690,160,'Catch quota'],['work',720,360,'Fishing effort'],
+           ['market',540,465,'Fish price'],['equity',275,465,'Community stake'],
+           ['climate',160,140,'Ocean temperature']],
         l:[[0,1,1],[1,2,1],[2,3,1],[3,0,-1],[3,4,-1],[4,3,1],[1,3,1],[0,5,1],[5,2,1],[6,0,-1]]}
     };
     wrap.querySelector('[data-preset]').addEventListener('change',function(e){
@@ -1156,8 +1187,13 @@ img.bleed{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
         var n=addNode(o[0],o[1],o[2]); if(o[3]) setLabel(n,o[3]); return n; });
       P.l.forEach(function(o){ links.push({a:made[o[0]],b:made[o[1]],p:o[2]}); });
       wrap.querySelector('[data-name]').value=P.name;
-      if(P.biome && bSel){ bSel.value=P.biome; bVeg.value=P.veg||''; bPre.value=P.pre||''; bTmp.value=P.tmp||'';
-        seeded={veg:bVeg.value,pre:bPre.value,tmp:bTmp.value}; }
+      if(bSel){
+        /* a loop demo has no biome, so clear the band rather than leaving the
+           PREVIOUS preset's desert or reef sitting above someone else's diagram */
+        bSel.value=P.biome||'';
+        bVeg.value=P.veg||''; bPre.value=P.pre||''; bTmp.value=P.tmp||'';
+        seeded={veg:bVeg.value,pre:bPre.value,tmp:bTmp.value};
+      }
       setExplanation('', null);   /* students write their own */
       redrawLinks(); analyse(); e.target.value='';
     });
@@ -1336,22 +1372,31 @@ img.bleed{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
     var spark=wrap.querySelector('[data-spark]');
     var shockModal=wrap.querySelector('[data-shockmodal]');
     var shockSpark=wrap.querySelector('[data-shock-spark]');
-    var shockResetT=null;
-    var SC={rein:'#A4373A', bal:'#2f7d4f', mid:'#BC8A2E', none:'#BC8A2E'};
+    var shockResetT=null, shockGen=0;
+    /* one colour per outcome. 'comp' = reinforcing AND balancing feedback both in
+       reach, which is the interesting case and used to be reported as a runaway. */
+    var SC={rein:'#A4373A', comp:'#BC8A2E', bal:'#2f7d4f', none:'#8c9a93'};
 
     function resetShockViz(){
       nodes.forEach(function(n){ n.blob.setAttribute('fill',DOM[n.vis].f);
         n.halo.setAttribute('opacity','0'); n.blob.style.filter=''; });
     }
-    // The little chart shows the CHARACTERISTIC SHAPE of each response, so it always
-    // agrees with the structural verdict (a runaway climbs, a balancing loop oscillates,
-    // an absorbed shock rises then settles). It is an archetype, not the raw simulation.
+    // The little chart shows the CHARACTERISTIC SHAPE of each response. It is an
+    // archetype, not the raw simulation, but it must never contradict the verdict.
+    //   rein — snowballs and saturates
+    //   comp — grows, then gets caught and wobbles to a new, higher level
+    //   bal  — pushed back toward where it started (this tool models no delay, so it
+    //          converges; overshoot and oscillation are what DELAY adds, which is why
+    //          the card says so rather than drawing a permanent oscillation)
+    //   none — no loop catches it, so it simply decays
     function archetype(kind){
       var N=48, ys=[];
       for(var i=0;i<N;i++){ var t=i/(N-1), y;
-        if(kind==='rein'){ y=0.12+0.86/(1+Math.exp(-(t-0.5)*9)); }        // snowball → saturate
-        else if(kind==='bal'){ var k=6.5; y=0.14+0.82*(k*t)*Math.exp(1-k*t); } // rise, then settle
-        else { y=0.5+0.34*Math.sin(t*Math.PI*4)*Math.exp(-0.2*t); }        // sustained oscillation
+        if(kind==='rein'){ y=0.12+0.86/(1+Math.exp(-(t-0.5)*9)); }
+        else if(kind==='comp'){ y=0.15+0.55/(1+Math.exp(-(t-0.34)*11))
+                                  +0.17*Math.sin(t*Math.PI*4)*Math.exp(-2.3*t); }
+        else if(kind==='bal'){ var k=6.5; y=0.14+0.80*(k*t)*Math.exp(1-k*t); }
+        else { y=0.08+0.86*Math.exp(-4.2*t); }
         ys.push(y);
       }
       return ys;
@@ -1383,6 +1428,7 @@ img.bleed{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
 
     function runShock(){
       if(!nodes.length) return;
+      var gen=++shockGen;               // loading a preset mid-animation invalidates this run
       if(shockResetT){ clearTimeout(shockResetT); shockResetT=null; }
       resetShockViz();
       var start=selected||nodes[Math.floor(Math.random()*nodes.length)];
@@ -1405,10 +1451,18 @@ img.bleed{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
       var ever=nodes.map(function(){return false;}); ever[idx[start.id]]=true;
       var hist=[1], step=0;
       (function frame(){
+        if(gen!==shockGen || nodes.length!==val.length) return;   // diagram changed under us
         if(step++>9){ finish(); return; }
+        /* Each node keeps RETENTION of its deviation and passes GAIN of it along each
+           arrow. With a cycle the spectral radius is RETENTION+GAIN, so a loop grows
+           only when that exceeds 1; with no cycle every eigenvalue is RETENTION, so
+           an acyclic chain always dies away. That is what makes the animation agree
+           with the structural verdict. The old 0.94 retention made even a straight
+           food chain pump itself up to the clamp with no loop anywhere. */
+        var RETENTION=0.6, GAIN=0.62;
         var nv=val.slice();
-        links.forEach(function(l){ nv[idx[l.b.id]] += (l.p===2?1:l.p)*val[idx[l.a.id]]*0.62; });
-        nv=nv.map(function(x){ return Math.max(-4,Math.min(4,x*0.94)); });
+        links.forEach(function(l){ nv[idx[l.b.id]] += (l.p===2?1:l.p)*val[idx[l.a.id]]*GAIN; });
+        nv=nv.map(function(x){ return Math.max(-4,Math.min(4,x*RETENTION)); });
         val=nv;
         var mag=0; val.forEach(function(x,i){ mag+=Math.abs(x); if(Math.abs(x)>=0.12) ever[i]=true; }); hist.push(mag);
         nodes.forEach(function(n,i){
@@ -1425,9 +1479,11 @@ img.bleed{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
         var spreadTxt = spread===0 ? 'the change stayed on <b>'+pesc(start.label)+'</b>'
                         : 'the change spread to <b>'+spread+'</b> other component'+(spread>1?'s':'');
 
-        // Verdict comes from STRUCTURE (the same loops the panel lists), not from the
-        // noisy magnitude — so the card can never contradict the loop read-out. We ask
-        // what the shocked component can actually reach along the arrows.
+        // Verdict comes from STRUCTURE (the same loops the panel lists) AND from what
+        // the animation actually did. Structure alone used to be able to contradict the
+        // picture on screen: the loop list ignores ⚡ energy arrows, but the simulation
+        // propagates along them, so a ring of energy arrows could drive every node to
+        // the clamp while the card said the shock had faded. `grew` catches that.
         var adj={}; nodes.forEach(function(n){ adj[n.id]=[]; });
         links.forEach(function(l){ adj[l.a.id].push(l.b.id); });
         var seen={}; seen[start.id]=true; var stk=[start.id];
@@ -1437,18 +1493,34 @@ img.bleed{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
             L.nodes.some(function(i){ return seen[nodes[i].id]; }); });
         }
         var reinReach=reaches(false), balReach=reaches(true);
+        var m0=hist[0]||1, mN=hist[hist.length-1], mPk=Math.max.apply(null,hist);
+        /* Careful: total magnitude rises just from a shock SPREADING down a chain,
+           with no amplification anywhere. A runaway is one that is still climbing
+           when the clock stops — i.e. the peak is at the end, not behind us. */
+        var grew = mN > m0*1.15 && mN >= mPk*0.999;
 
         var out;
-        if(reinReach){
+        if(reinReach && balReach){
+          out={kind:'comp', word:'Two forces pulled on it',
+            lead:'You shocked <b>'+pesc(start.label)+'</b> and '+spreadTxt+', into <b>both</b> kinds of feedback at once.',
+            body:'The change reaches a reinforcing loop ('+loopName(false)+') that makes it bigger every time round, and a balancing loop ('+loopName(true)+') that pushes it back. What the system does next is a race between them: whichever loop is <b>stronger and faster</b> wins. Most real systems look like this, and it is why a problem can seem under control for years and then get away — the balancing loop was holding, until it could not.'};
+        } else if(reinReach){
           out={kind:'rein', word:'It ran away',
             lead:'You shocked <b>'+pesc(start.label)+'</b> and '+spreadTxt+' — straight into a <b>reinforcing loop</b>.',
             body:'Once the change reaches a loop like '+loopName(false)+', every trip around makes it <b>larger</b>. A small nudge snowballs into a big one — that is <em>non-linearity</em>, and it is how tipping points sneak up on people.'};
+        } else if(grew){
+          /* No causal loop can explain this, so the growth is coming from ⚡ energy
+             arrows that close a ring. Energy does not cycle — say so rather than
+             printing a verdict that contradicts the animation. */
+          out={kind:'rein', word:'It kept growing',
+            lead:'You shocked <b>'+pesc(start.label)+'</b> and '+spreadTxt+', and the disturbance <b>kept building</b>.',
+            body:'Nothing in your <b class="pos">+</b>/<b class="neg">−</b> arrows explains that, so the growth is coming from <b>⚡ energy arrows that loop back on themselves</b>. Energy flows one way through a food chain and leaves as heat — it does not return to the producers. Check whether one of those arrows should be a cause-and-effect arrow instead.'};
         } else if(balReach){
-          out={kind:'mid', word:'It kept circulating',
-            lead:'You shocked <b>'+pesc(start.label)+'</b> and '+spreadTxt+', looping back through <b>balancing feedback</b>.',
-            body:'A balancing loop like '+loopName(true)+' keeps pushing the change back the other way, so instead of exploding or vanishing it <em>oscillates</em> — over-correcting one way, then the other. That steady give-and-take is what a balancing loop does; it settles into a rhythm rather than simply stopping.'};
+          out={kind:'bal', word:'It was pushed back',
+            lead:'You shocked <b>'+pesc(start.label)+'</b> and '+spreadTxt+', into <b>balancing feedback</b>.',
+            body:'A balancing loop like '+loopName(true)+' works against the change, so instead of running away it is pulled back toward where it started. Whether it settles smoothly or overshoots and swings past first depends on how strong the loop is and <em>how long it takes to respond</em> — delay is what turns a balancing loop into an oscillating one.'};
         } else {
-          out={kind:'bal', word:'The system absorbed it',
+          out={kind:'none', word:'The system absorbed it',
             lead:'You shocked <b>'+pesc(start.label)+'</b> and '+spreadTxt+', but the disturbance <b>faded</b>.',
             body: spread>0
               ? 'The change rippled outward and then ran out of energy: with no loop to catch it and feed it back, it simply drained out of the system. That capacity to take a hit and return to normal is <em>resilience</em>.'
